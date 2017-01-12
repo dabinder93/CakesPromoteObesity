@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "414797758507",
+    "firebase_url": "https://cakespromoteobesity.firebaseio.com",
+    "project_id": "cakespromoteobesity",
+    "storage_bucket": "cakespromoteobesity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414797758507:android:1789c69ed47469cb",
+        "android_client_info": {
+          "package_name": "at.fhooe.mc.android.cakespromoteobesity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414797758507-kjifvbarkenb88mrf95ndkstqe34ulrq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "at.fhooe.mc.android.cakespromoteobesity",
+            "certificate_hash": "57E3B8FE756CA8E11240D156FD0D26EB53D8FEC1"
+          }
+        },
+        {
+          "client_id": "414797758507-bqum4v3j31lrva32c8r5rag3h7kn8k12.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXtt6mlN33XTEe9PMs73wer4qDa-lGypA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414797758507-bqum4v3j31lrva32c8r5rag3h7kn8k12.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
