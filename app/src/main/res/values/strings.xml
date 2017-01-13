@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CakesPromoteObesity</string>
+    <string name="btn_text_createLobby">Create a Lobby</string>
+    <string name="btn_text_joinLobby">Join a Lobby</string>
+    <string name="tv_txt_players">Max Players:</string>
+    <string name="tv_txt_winpoints">Points needed to win:</string>
+    <string name="tv_txt_decks">Decks used for the game:</string>
+    <string name="btn_txt_startLobby">Create the lobby</string>
 </resources>
