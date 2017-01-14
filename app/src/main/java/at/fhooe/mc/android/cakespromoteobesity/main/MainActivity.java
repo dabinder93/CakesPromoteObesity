@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby;
 

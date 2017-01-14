@@ -9,17 +9,17 @@ import java.util.List;
 public class Lobby {
     private String mName;
     private String mPassword;
-    private int mMaxPlayers;
-    private int mWinpoints;
-    private List<String> mSelectedDecks;
+    private String mMaxPlayers;
+    private String mWinpoints;
+    //private List<String> mSelectedDecks;
     //private int mUsersInLobby;
 
-    public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, List<String> _selectedDecks) {
+    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints){// List<String> _selectedDecks
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
         mWinpoints = _winPoints;
-        mSelectedDecks = _selectedDecks;
+      //  mSelectedDecks = _selectedDecks;
     }
 
     /*public int getmUsersInLobby() {
@@ -46,29 +46,29 @@ public class Lobby {
         this.mPassword = mPassword;
     }
 
-    public int getmMaxPlayers() {
+    public String getmMaxPlayers() {
         return mMaxPlayers;
     }
 
-    public void setmMaxPlayers(int mMaxPlayers) {
+    public void setmMaxPlayers(String mMaxPlayers) {
         this.mMaxPlayers = mMaxPlayers;
     }
 
-    public int getmWinpoints() {
+    public String getmWinpoints() {
         return mWinpoints;
     }
 
-    public void setmWinpoints(int mWinpoints) {
+    public void setmWinpoints(String mWinpoints) {
         this.mWinpoints = mWinpoints;
     }
 
-    public List<String> getmSelectedDecks() {
+ /*   public List<String> getmSelectedDecks() {
         return mSelectedDecks;
     }
 
     public void setmSelectedDecks(List<String> mSelectedDecks) {
         this.mSelectedDecks = mSelectedDecks;
-    }
+    } */
 }
 
 

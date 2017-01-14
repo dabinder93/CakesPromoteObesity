@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "414797758507-8rcvt9nunfoo6p0u2163cm4i9t0r0jgm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "at.fhooe.mc.android.cakespromoteobesity",
+            "certificate_hash": "E42D16A8F6CE2A4746B826A623FDB60006552565"
+          }
+        },
+        {
           "client_id": "414797758507-kjifvbarkenb88mrf95ndkstqe34ulrq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
