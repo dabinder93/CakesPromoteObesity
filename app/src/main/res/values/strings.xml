@@ -6,4 +6,6 @@
     <string name="tv_txt_winpoints">Points needed to win:</string>
     <string name="tv_txt_decks">Decks used for the game:</string>
     <string name="btn_txt_startLobby">Create the lobby</string>
+    <string name="tv_txt_lobbyname">Lobby Name</string>
+    <string name="tv_txt_lobbyPassword">Password</string>
 </resources>
