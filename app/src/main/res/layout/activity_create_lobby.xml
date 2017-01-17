@@ -107,12 +107,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_decks" />
 
-        <Spinner
+        <at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner
             android:id="@+id/spinner_decks"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
+            android:layout_margin="2dp" />
 
     </LinearLayout>
 

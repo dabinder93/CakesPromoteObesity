@@ -25,6 +25,7 @@ import java.util.Map;
 
 import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 
 public class CreateLobby extends AppCompatActivity{
@@ -33,12 +34,13 @@ public class CreateLobby extends AppCompatActivity{
     EditText lobbyPassword;
     Spinner dropdown_players;
     Spinner dropdown_winpoints;
-    Spinner dropdown_decks;
+    MultiSelectionSpinner dropdown_decks;
     Button startLobby;
     Context context;
 
     //List which contains all Decks with names
     private List<Deck> deckList;
+    private List<String> deckListString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class CreateLobby extends AppCompatActivity{
         lobbyPassword = (EditText) findViewById(R.id.et_password);
         dropdown_players = (Spinner)findViewById(R.id.spinner_players);
         dropdown_winpoints = (Spinner)findViewById(R.id.spinner_winpoints);
-        dropdown_decks = (Spinner) findViewById(R.id.spinner_decks);
+        dropdown_decks = (MultiSelectionSpinner) findViewById(R.id.spinner_decks);
         startLobby = (Button) findViewById(R.id.btn_startLobby);
         ArrayAdapter<String> adapter_decks;
 
@@ -72,6 +74,8 @@ public class CreateLobby extends AppCompatActivity{
 
         //Get Deck Names for each existing Deck from Database -> stores it in decklist
         deckList = new ArrayList<>();
+        deckListString = new ArrayList<>();
+
         deckRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -83,6 +87,9 @@ public class CreateLobby extends AppCompatActivity{
                     deckList.add(deck);
                     Log.i(TAG, "Deck List Object Name: "+ deck.getmDeckName()+ " , ID: "+deck.getmDeckID());
 
+                    deckListString.add(deck.getmDeckName());
+
+                    /*
                     //Convert from ArrayList<Decks> into String[] for Adapter
                     String[] deckListString = new String[deckList.size()];
                     for(int i = 0; i < deckList.size(); i++) {
@@ -90,8 +97,10 @@ public class CreateLobby extends AppCompatActivity{
                     }
                     Log.i(TAG, "Deck List Spinner Array.list :"+ Arrays.toString(deckListString));
                     ArrayAdapter<String> adapter_decks = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, deckListString);
-                    dropdown_decks.setAdapter(adapter_decks);
+                    dropdown_decks.setAdapter(adapter_decks); */
                 }
+                dropdown_decks.setItems(deckListString);
+
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
