@@ -11,15 +11,17 @@ public class Lobby {
     private String mPassword;
     private String mMaxPlayers;
     private String mWinpoints;
+    private List<String> mSelectedDecks;
+
     //private List<String> mSelectedDecks;
     //private int mUsersInLobby;
 
-    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints){// List<String> _selectedDecks
+    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<String> _selectedDecks){
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
         mWinpoints = _winPoints;
-      //  mSelectedDecks = _selectedDecks;
+        mSelectedDecks = _selectedDecks;
     }
 
     /*public int getmUsersInLobby() {
@@ -60,6 +62,14 @@ public class Lobby {
 
     public void setmWinpoints(String mWinpoints) {
         this.mWinpoints = mWinpoints;
+    }
+
+    public List<String> getmDecks() {
+        return mSelectedDecks;
+    }
+
+    public void setmDecks(List<String> mDecks) {
+        this.mSelectedDecks = mDecks;
     }
 
  /*   public List<String> getmSelectedDecks() {

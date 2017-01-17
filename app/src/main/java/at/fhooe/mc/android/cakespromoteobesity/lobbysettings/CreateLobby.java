@@ -116,9 +116,10 @@ public class CreateLobby extends AppCompatActivity{
                 String password = lobbyPassword.getText().toString();
                 String maxPlayer = dropdown_players.getSelectedItem().toString();
                 String winPoints = dropdown_winpoints.getSelectedItem().toString();
+                List<String> decks = dropdown_decks.getSelectedStrings();
 
                 //Lobby Objeckt
-                Lobby newLobby = new Lobby(name, password, maxPlayer, winPoints);
+                Lobby newLobby = new Lobby(name, password, maxPlayer, winPoints, decks);
                 Toast toast = Toast.makeText(getApplicationContext(), newLobby.getmName()+", "+newLobby.getmPassword()+", "
                         +newLobby.getmMaxPlayers()+", "+newLobby.getmWinpoints(), Toast.LENGTH_LONG);
                 toast.show();
