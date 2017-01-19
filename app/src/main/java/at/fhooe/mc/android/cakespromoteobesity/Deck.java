@@ -8,9 +8,38 @@ public class Deck {
 
     private String mDeckName;
     private String mDeckID;
+    private int mBlackCardCount;
+    private int mWhiteCardCount;
 
-    public Deck(){}
+    public Deck(String _name, String _deckID, int _blackCardCount, int _whiteCardCount){
+        mDeckName = _name;
+        mDeckID = _deckID;
+        mBlackCardCount = _blackCardCount;
+        mWhiteCardCount = _whiteCardCount;
+    }
 
+    /**
+     * Default Constructor is only for Firebase use
+     */
+    public Deck() {
+    }
+
+
+    public int getmWhiteCardCount() {
+        return mWhiteCardCount;
+    }
+
+    public void setmWhiteCardCount(int mCardCount) {
+        this.mWhiteCardCount = mCardCount;
+    }
+
+    public int getmBlackCardCount() {
+        return mBlackCardCount;
+    }
+
+    public void setmBlackCardCount(int mCardCount) {
+        this.mBlackCardCount = mCardCount;
+    }
 
     public String getmDeckName() {
         return mDeckName;

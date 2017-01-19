@@ -10,15 +10,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
-import at.fhooe.mc.android.cakespromoteobesity.database.Database;
 import at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
@@ -29,8 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static User mUser;
     public String mUserKey;
     private String mPlayerName;
-    public static Database database = new Database();
-    final DatabaseReference mainRef = database.getDatabase().getReference();
+    public static final DatabaseReference mainRef = FirebaseDatabase.getInstance().getReference();
     final DatabaseReference usersRef = mainRef.child("Users");
     Intent i;
 
@@ -44,6 +45,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mJoinLobby = (Button) findViewById(R.id.btn_joinLobby);
         mCreateLobby.setOnClickListener(this);
         et_playerName = (EditText) findViewById(R.id.et_playerName);
+
+
+        //Testreihe
+        Deck deck = new Deck("UK Starter Kit","UKMain",34,65);
+        String key = mainRef.child("Decks").push().getKey();
+        mainRef.child("Decks").child("UKMain").setValue(deck);
+
+        deck = new Deck("US Starter Kit","USMain",76,460);
+        key = mainRef.child("Decks").push().getKey();
+        mainRef.child("Decks").child("USMain").setValue(deck);
+
     }
 
     @Override

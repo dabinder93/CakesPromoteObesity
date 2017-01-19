@@ -34,10 +34,10 @@ import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 public class CreateLobby extends AppCompatActivity implements View.OnClickListener{
 
     //References to Database
-    DatabaseReference ref; // = FirebaseDatabase.getInstance().getReference();
+    final DatabaseReference ref = MainActivity.mainRef; // = FirebaseDatabase.getInstance().getReference();
     //final DatabaseReference resourcesRef = ref.child("Resources");
     //final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://cakespromoteobesity.firebaseio.com/Decks");
-    DatabaseReference decksRef; // = FirebaseDatabase.getInstance().getReference().child("Decks");
+    final DatabaseReference decksRef = MainActivity.mainRef.child("Decks"); // = FirebaseDatabase.getInstance().getReference().child("Decks");
 
 
 
@@ -69,8 +69,6 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         startLobby = (Button) findViewById(R.id.btn_startLobby);
         startLobby.setOnClickListener(this);
         ArrayAdapter<String> adapter_decks;
-        ref = MainActivity.database.getDatabase().getReference();
-        decksRef = ref.child("Decks");
 
         //Player count Spinner
         String[] items_players = new String[]{"3", "4", "5", "6", "7", "8"};
@@ -91,16 +89,23 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    Deck deck = new Deck();
-                    deck.setmDeckID(snap.getKey().toString());
+                    Deck deck = snap.getValue(Deck.class);
+                    deckList.add(deck);
+                    deckListString.add(deck.getmDeckName());
+
+
+                    /*Deck deck = new Deck();
+                    deck.setmDeckID(snap.getKey().toString());*/
 
                     //get all Data in Decks
-                    Map<String, String> map = snap.getValue(Map.class);
+                    /*Map<String, String> map = snap.getValue(Map.class);
                     deck.setmDeckName(map.get("DeckName"));
                     deckList.add(deck);
                     Log.i(TAG, "Deck List Object Name: "+ deck.getmDeckName()+ " , ID: "+deck.getmDeckID());
 
-                    deckListString.add(deck.getmDeckName());
+                    deckListString.add(deck.getmDeckName());*/
+
+
 
                     /*
                     //Convert from ArrayList<Decks> into String[] for Adapter
