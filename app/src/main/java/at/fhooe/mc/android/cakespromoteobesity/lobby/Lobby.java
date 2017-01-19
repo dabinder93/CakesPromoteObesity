@@ -1,10 +1,12 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
+import com.firebase.client.Firebase;
+
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Bastian on 13.01.2017.
- */
+import at.fhooe.mc.android.cakespromoteobesity.user.User;
+
 
 public class Lobby {
     private String mName;
@@ -12,9 +14,14 @@ public class Lobby {
     private String mMaxPlayers;
     private String mWinpoints;
     private List<String> mSelectedDecks;
+    private List<String> mUserList;
+    private int mUsersInLobby;
 
-    //private List<String> mSelectedDecks;
-    //private int mUsersInLobby;
+
+    /**
+     * Default Construcot needed for Firebase usage
+     */
+    public Lobby(){}
 
     public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<String> _selectedDecks){
         mName = _name;
@@ -22,7 +29,31 @@ public class Lobby {
         mMaxPlayers = _maxPlayers;
         mWinpoints = _winPoints;
         mSelectedDecks = _selectedDecks;
+        mUsersInLobby = 0;
+        mUserList = new ArrayList<String>();
+        mUserList.add("David");
+        mUserList.add("Basti");
+        mUserList.add("Schicki");
     }
+
+    public int getmUsersInLobby() {
+        return mUsersInLobby;
+    }
+
+    public void setmUsersInLobby(int mUsersInLobby) {
+        this.mUsersInLobby = mUsersInLobby;
+    }
+
+    public List<String> getmUserList() {
+        return mUserList;
+    }
+
+    public void setmUserList(List<String> mUserList) {
+        this.mUserList = mUserList;
+    }
+
+    //private List<String> mSelectedDecks;
+    //private int mUsersInLobby;
 
     /*public int getmUsersInLobby() {
         return mUsersInLobby;
@@ -31,7 +62,6 @@ public class Lobby {
     public void setmUsersInLobby(int mUsersInLobby) {
         this.mUsersInLobby = mUsersInLobby;
     }*/
-
     public String getmName() {
         return mName;
     }

@@ -8,4 +8,5 @@
     <string name="btn_txt_startLobby">Create the lobby</string>
     <string name="tv_txt_lobbyname">Lobby Name</string>
     <string name="tv_txt_lobbyPassword">Password</string>
+    <string name="tv_txt_playerName">Enter your Player Name</string>
 </resources>
