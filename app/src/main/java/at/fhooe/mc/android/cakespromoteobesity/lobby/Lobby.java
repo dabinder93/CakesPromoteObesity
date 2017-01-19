@@ -1,10 +1,13 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 
@@ -13,30 +16,17 @@ public class Lobby {
     private String mPassword;
     private String mMaxPlayers;
     private String mWinpoints;
-    private List<String> mSelectedDecks;
+    private List<Deck> mSelectedDecks;
     private List<String> mUserList;
     private int mUsersInLobby;
 
 
     /**
-     * Default Construcot needed for Firebase usage
+     * Default Construcor needed for Firebase usage
      */
     public Lobby(){}
 
-    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<String> _selectedDecks){
-        mName = _name;
-        mPassword = _password;
-        mMaxPlayers = _maxPlayers;
-        mWinpoints = _winPoints;
-        mSelectedDecks = _selectedDecks;
-        mUsersInLobby = 0;
-        mUserList = new ArrayList<String>();
-        mUserList.add("David");
-        mUserList.add("Basti");
-        mUserList.add("Schicki");
-    }
-
-    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<String> _selectedDecks, User _user){
+    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<Deck> _selectedDecks, User _user){
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
@@ -44,6 +34,7 @@ public class Lobby {
         mSelectedDecks = _selectedDecks;
         mUsersInLobby = 1;
         mUserList = new ArrayList<String>();
+
         mUserList.add(_user.getmName());
     }
 
@@ -105,11 +96,11 @@ public class Lobby {
         this.mWinpoints = mWinpoints;
     }
 
-    public List<String> getmDecks() {
+    public List<Deck> getmDecks() {
         return mSelectedDecks;
     }
 
-    public void setmDecks(List<String> mDecks) {
+    public void setmDecks(List<Deck> mDecks) {
         this.mSelectedDecks = mDecks;
     }
 

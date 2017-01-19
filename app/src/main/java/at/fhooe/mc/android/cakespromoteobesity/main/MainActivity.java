@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mJoinLobby, mCreateLobby;
     private EditText et_playerName;
     public static User mUser;
-    public String mUserKey;
+    public static String mUserKey;
     private String mPlayerName;
     public static final DatabaseReference mainRef = FirebaseDatabase.getInstance().getReference();
     final DatabaseReference usersRef = mainRef.child("Users");
@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         et_playerName = (EditText) findViewById(R.id.et_playerName);
 
 
-        //Testreihe
-        Deck deck = new Deck("UK Starter Kit","UKMain",34,65);
+        //Get a deck into Decks-Branch
+        /*String deckName = "UK Starter Kit";
+        String deckID = "UKMain";
+        int whiteCard = 34;
+        int blackCard = 65;
+        Deck deck = new Deck(deckName,deckID,blackCard,whiteCard);
         String key = mainRef.child("Decks").push().getKey();
-        mainRef.child("Decks").child("UKMain").setValue(deck);
-
-        deck = new Deck("US Starter Kit","USMain",76,460);
-        key = mainRef.child("Decks").push().getKey();
-        mainRef.child("Decks").child("USMain").setValue(deck);
+        mainRef.child("Decks").child(deckID).setValue(deck);*/
 
     }
 
@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //enterPlayerName();
 
                     }else{
-                        mUser = new User(mPlayerName);
                         mUserKey = usersRef.push().getKey();
+                        mUser = new User(mPlayerName,mUserKey);
                         usersRef.child(mUserKey).setValue(mUser);
                         startActivity(i);
                     }
@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.btn_joinLobby: {
                 if (mUser == null) {
-                    mUser = new User(mPlayerName);
                     mUserKey = usersRef.push().getKey();
+                    mUser = new User(mPlayerName,mUserKey);
                     usersRef.child(mUserKey).setValue(mUser);
                 }
             }

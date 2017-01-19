@@ -23,6 +23,47 @@ public class User {
     private String mName;
     private int mUserGameID;
     private boolean mIsHost;
+    private String mUserKey;
+
+    public User(String _name, String _userKey, boolean _isHost){
+        mName = _name;
+        mIsHost = _isHost;
+        mUserKey = _userKey;
+    }
+
+    public User(String _name, String _userKey){
+        mName = _name;
+        mIsHost = false;
+        mUserKey = _userKey;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String _mName) {
+        mName = _mName;
+    }
+
+    public int getmUserGameID() {
+        return mUserGameID;
+    }
+
+    public void setmUserGameID(int mUserGameID) {
+        this.mUserGameID = mUserGameID;
+    }
+
+    public boolean ismIsHost() {
+        return mIsHost;
+    }
+
+    public void setmIsHost(boolean _mIsHost) {
+        mIsHost = _mIsHost;
+    }
+
+    public String getmUserKey() {
+        return mUserKey;
+    }
 
     public void addToLobby(final String _key){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(); //"https://cakespromoteobesity.firebaseio.com/Lobbies");
@@ -83,40 +124,5 @@ public class User {
 
             }
         }); */
-    }
-    public User(String _name, boolean _isHost){
-        mName = _name;
-        mIsHost = _isHost;
-    }
-
-    public User(String _name){
-        mName = _name;
-    }
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
-        this.mName = mName;
-    }
-
-    public int getmUserGameID() {
-        return mUserGameID;
-    }
-
-    public void setmUserGameID(int mUserGameID) {
-        this.mUserGameID = mUserGameID;
-    }
-
-    public boolean ismIsHost() {
-        return mIsHost;
-    }
-
-    public void setmIsHost(boolean _mIsHost, String _key) {
-        this.mIsHost = mIsHost;
-        //final Firebase usersRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Users").child(_key);
-        DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(_key);
-
     }
 }
