@@ -2,6 +2,7 @@ package at.fhooe.mc.android.cakespromoteobesity.lobbysettings;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,10 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +34,10 @@ import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 public class CreateLobby extends AppCompatActivity implements View.OnClickListener{
 
     //References to Database
-    final Firebase ref = new Firebase("https://cakespromoteobesity.firebaseio.com/Testbranch");
-    final Firebase resourcesRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Resources");
-    final Firebase decksRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Decks");
-
+    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    //final DatabaseReference resourcesRef = ref.child("Resources");
+    final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://cakespromoteobesity.firebaseio.com/Decks");
+    //final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference().child("Decks");
 
     public static final String TAG = "CreateLobby Test";
     EditText lobbyName;
@@ -79,10 +82,11 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         deckList = new ArrayList<>();
         deckListString = new ArrayList<>();
 
-        decksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        decksRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap:dataSnapshot.getChildren()){
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
                     Deck deck = new Deck();
                     deck.setmDeckID(snap.getKey().toString());
 
@@ -105,10 +109,10 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                     dropdown_decks.setAdapter(adapter_decks); */
                 }
                 dropdown_decks.setItems(deckListString);
-
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });

@@ -3,6 +3,7 @@ package at.fhooe.mc.android.cakespromoteobesity.user;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,15 +18,15 @@ import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 /**
  * Created by David on 18.01.2017.
  */
-public class User extends AppCompatActivity{
+public class User {
 
     private String mName;
     private int mUserGameID;
     private boolean mIsHost;
 
     public void addToLobby(final String _key){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference(); //"https://cakespromoteobesity.firebaseio.com/Lobbies");
-        final DatabaseReference lobbyRef = db.child("Lobbies").child(_key);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(); //"https://cakespromoteobesity.firebaseio.com/Lobbies");
+        final DatabaseReference lobbyRef = ref.child("Lobbies").child(_key);
 
         //final Firebase usersInLobbiesRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Lobbies");
 
@@ -33,7 +34,7 @@ public class User extends AppCompatActivity{
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
-                    Toast.makeText(User.this, "Snapshot existiert nicht", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(User.this, "Snapshot existiert nicht", Toast.LENGTH_SHORT).show();
                 }else{
                     Lobby lobby = dataSnapshot.getValue(Lobby.class);
                     //int usersInLobby = lobby.getmUsersInLobby();
@@ -112,7 +113,10 @@ public class User extends AppCompatActivity{
         return mIsHost;
     }
 
-    public void setmIsHost(boolean mIsHost) {
+    public void setmIsHost(boolean _mIsHost, String _key) {
         this.mIsHost = mIsHost;
+        //final Firebase usersRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Users").child(_key);
+        DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(_key);
+
     }
 }

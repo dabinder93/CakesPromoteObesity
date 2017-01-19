@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static User mUser;
     public String mUserKey;
     private String mPlayerName;
-    final Firebase usersRef = new Firebase("https://cakespromoteobesity.firebaseio.com/Users");
+    final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
     Intent i;
 
     @Override

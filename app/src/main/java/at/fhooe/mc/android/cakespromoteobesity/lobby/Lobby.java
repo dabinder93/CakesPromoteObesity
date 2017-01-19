@@ -36,6 +36,17 @@ public class Lobby {
         mUserList.add("Schicki");
     }
 
+    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<String> _selectedDecks, User _user){
+        mName = _name;
+        mPassword = _password;
+        mMaxPlayers = _maxPlayers;
+        mWinpoints = _winPoints;
+        mSelectedDecks = _selectedDecks;
+        mUsersInLobby = 1;
+        mUserList = new ArrayList<String>();
+        mUserList.add(_user.getmName());
+    }
+
     public int getmUsersInLobby() {
         return mUsersInLobby;
     }
