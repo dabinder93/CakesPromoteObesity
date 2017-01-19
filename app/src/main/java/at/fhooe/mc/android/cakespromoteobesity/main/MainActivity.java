@@ -18,6 +18,7 @@ import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.database.Database;
 import at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
@@ -28,7 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static User mUser;
     public String mUserKey;
     private String mPlayerName;
-    final DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+    public static Database database = new Database();
+    final DatabaseReference mainRef = database.getDatabase().getReference();
+    final DatabaseReference usersRef = mainRef.child("Users");
     Intent i;
 
     @Override

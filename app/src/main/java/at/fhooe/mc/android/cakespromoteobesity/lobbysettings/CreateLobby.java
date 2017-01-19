@@ -34,10 +34,12 @@ import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 public class CreateLobby extends AppCompatActivity implements View.OnClickListener{
 
     //References to Database
-    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference ref; // = FirebaseDatabase.getInstance().getReference();
     //final DatabaseReference resourcesRef = ref.child("Resources");
-    final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://cakespromoteobesity.firebaseio.com/Decks");
-    //final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReference().child("Decks");
+    //final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://cakespromoteobesity.firebaseio.com/Decks");
+    DatabaseReference decksRef; // = FirebaseDatabase.getInstance().getReference().child("Decks");
+
+
 
     public static final String TAG = "CreateLobby Test";
     EditText lobbyName;
@@ -67,6 +69,8 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         startLobby = (Button) findViewById(R.id.btn_startLobby);
         startLobby.setOnClickListener(this);
         ArrayAdapter<String> adapter_decks;
+        ref = MainActivity.database.getDatabase().getReference();
+        decksRef = ref.child("Decks");
 
         //Player count Spinner
         String[] items_players = new String[]{"3", "4", "5", "6", "7", "8"};
