@@ -93,7 +93,7 @@ public class JoinLobby extends AppCompatActivity {
                         mLobbyList.add(lobby);
                     }
                 }
-                Toast.makeText(JoinLobby.this,"There are a total of " + mLobbyList.size() + " Lobbies up",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(JoinLobby.this,"There are a total of " + mLobbyList.size() + " Lobbies up",Toast.LENGTH_SHORT).show();
                 mAdapter = new LobbyListAdapter(JoinLobby.this,mLobbyList);
                 mRecyclerView.setAdapter(mAdapter);
             }
