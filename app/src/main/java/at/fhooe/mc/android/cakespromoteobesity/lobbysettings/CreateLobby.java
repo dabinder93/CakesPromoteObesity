@@ -53,7 +53,7 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_lobby);
+        setContentView(R.layout.activity_lobby_create);
 
         lobbyName = (EditText) findViewById(R.id.et_name);
         lobbyPassword = (EditText) findViewById(R.id.et_password);
@@ -121,9 +121,8 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 mUser.setmIsHost(true);
                 DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey());
                 dbRef.setValue(mUser);
-
-                Lobby newLobby = new Lobby(name, password, maxPlayer, winPoints, selectedDecks, mUser);
                 mLobbyKey = ref.child("Lobbies").push().getKey();
+                Lobby newLobby = new Lobby(name, password, maxPlayer, winPoints, mLobbyKey, selectedDecks, mUser);
                 //Push Lobby Object into Database /Testbranch
                 ref.child("Lobbies").child(mLobbyKey).setValue(newLobby);
             }break;

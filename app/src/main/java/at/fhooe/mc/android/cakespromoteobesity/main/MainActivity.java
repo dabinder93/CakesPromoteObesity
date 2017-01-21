@@ -21,6 +21,7 @@ import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
@@ -40,10 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i("TAG", "in OnCreate");
-        i = new Intent(this, CreateLobby.class);
+
         mCreateLobby = (Button) findViewById(R.id.btn_createLobby);
         mJoinLobby = (Button) findViewById(R.id.btn_joinLobby);
         mCreateLobby.setOnClickListener(this);
+        mJoinLobby.setOnClickListener(this);
         et_playerName = (EditText) findViewById(R.id.et_playerName);
 
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View _view) {
         switch (_view.getId()) {
             case R.id.btn_createLobby: {
+                i = new Intent(this, CreateLobby.class);
                 if (mUser == null) {
                     mPlayerName = et_playerName.getText().toString();
                     if(mPlayerName.length() < 4){
@@ -90,10 +93,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             break;
             case R.id.btn_joinLobby: {
+                i = new Intent(this, JoinLobby.class);
                 if (mUser == null) {
-                    mUserKey = usersRef.push().getKey();
-                    mUser = new User(mPlayerName,mUserKey);
-                    usersRef.child(mUserKey).setValue(mUser);
+                    mPlayerName = et_playerName.getText().toString();
+                    if(mPlayerName.length() < 4){
+                        Toast.makeText(this, "Playername must have at least 4 Letters", Toast.LENGTH_SHORT).show();
+                        //enterPlayerName();
+
+                    }else{
+                        mUserKey = usersRef.push().getKey();
+                        mUser = new User(mPlayerName,mUserKey);
+                        usersRef.child(mUserKey).setValue(mUser);
+                        startActivity(i);
+                    }
+                }else{
+                    startActivity(i);
                 }
             }
             break;

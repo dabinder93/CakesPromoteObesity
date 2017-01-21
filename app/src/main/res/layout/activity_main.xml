@@ -12,14 +12,14 @@
     tools:context="at.fhooe.mc.android.cakespromoteobesity.main.MainActivity">
 
     <Button
-        android:text="@string/btn_text_createLobby"
+        android:text="@string/btn_main_text_createLobby"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/btn_createLobby" />
 
     <Button
-        android:text="@string/btn_text_joinLobby"
+        android:text="@string/btn_main_text_joinLobby"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_joinLobby" />

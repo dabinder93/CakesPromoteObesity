@@ -1,9 +1,5 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +12,7 @@ public class Lobby {
     private String mPassword;
     private String mMaxPlayers;
     private String mWinpoints;
+    private String mLobbyKey;
     private List<Deck> mSelectedDecks;
     private List<String> mUserList;
     private int mUsersInLobby;
@@ -26,11 +23,12 @@ public class Lobby {
      */
     public Lobby(){}
 
-    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, List<Deck> _selectedDecks, User _user){
+    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
         mWinpoints = _winPoints;
+        mLobbyKey = _lobbyID;
         mSelectedDecks = _selectedDecks;
         mUsersInLobby = 1;
         mUserList = new ArrayList<String>();
@@ -102,6 +100,14 @@ public class Lobby {
 
     public void setmDecks(List<Deck> mDecks) {
         this.mSelectedDecks = mDecks;
+    }
+
+    public String getmLobbyKey() {
+        return mLobbyKey;
+    }
+
+    public void setmLobbyKey(String mLobbyKey) {
+        this.mLobbyKey = mLobbyKey;
     }
 
  /*   public List<String> getmSelectedDecks() {
