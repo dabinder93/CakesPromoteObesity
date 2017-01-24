@@ -14,5 +14,6 @@
     <string name="btn_main_text_createLobby">Create a Lobby</string>
     <string name="btn_main_text_joinLobby">Join a lobby</string>
     <string name="title_activity_lobby_overview">LobbyOverview</string>
-    <string name="tv_txt_Host">Host</string>
+    <string name="tv_txt_Host">Host:</string>
+    <string name="btn_txt_startGame">Start the Game!</string>
 </resources>

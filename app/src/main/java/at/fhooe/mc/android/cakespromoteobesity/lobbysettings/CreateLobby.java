@@ -1,5 +1,6 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobbysettings;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,7 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     Spinner dropdown_winpoints;
     MultiSelectionSpinner dropdown_decks;
     Button startLobby;
+    Lobby newLobby;
 
     //List which contains all Decks with names
     private List<Deck> deckList;
@@ -113,18 +115,21 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 for (int i = 0; i < deckIndexSelected.size(); i++) {
                     selectedDecks.add(deckList.get(deckIndexSelected.get(i)));
                 }
-
-
-
-
+                
                 //Lobby Objekt
                 mUser.setmIsHost(true);
                 DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey());
                 dbRef.setValue(mUser);
                 mLobbyKey = ref.child("Lobbies").push().getKey();
-                Lobby newLobby = new Lobby(name, password, maxPlayer, winPoints, mLobbyKey, selectedDecks, mUser);
+                newLobby = new Lobby(name, password, maxPlayer, winPoints, mLobbyKey, selectedDecks, mUser);
                 //Push Lobby Object into Database /Testbranch
                 ref.child("Lobbies").child(mLobbyKey).setValue(newLobby);
+
+                Intent i = new Intent(this, LobbyOverview.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LobbyObject", newLobby);
+                i.putExtras(bundle);
+                startActivity(i);
             }break;
         }
     }

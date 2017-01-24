@@ -1,10 +1,12 @@
 package at.fhooe.mc.android.cakespromoteobesity;
 
+import java.io.Serializable;
+
 /**
  * Created by David on 16.01.2017.
  */
 
-public class Deck {
+public class Deck implements Serializable{
 
     private String mDeckName;
     private String mDeckID;

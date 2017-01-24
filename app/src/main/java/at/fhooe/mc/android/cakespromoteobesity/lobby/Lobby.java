@@ -1,5 +1,6 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 
-public class Lobby {
+public class Lobby implements Serializable{
     private String mName;
     private String mPassword;
     private String mMaxPlayers;
