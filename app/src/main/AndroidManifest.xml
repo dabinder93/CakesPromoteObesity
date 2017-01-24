@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".lobbysettings.CreateLobby" />
-        <activity android:name=".lobby.JoinLobby"/>
+        <activity android:name=".lobby.JoinLobby" />
+        <activity android:name=".lobbysettings.LobbyOverview"></activity>
     </application>
 
 </manifest>
