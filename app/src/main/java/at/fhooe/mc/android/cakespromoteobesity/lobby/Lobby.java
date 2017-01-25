@@ -17,12 +17,15 @@ public class Lobby implements Serializable{
     private List<Deck> mSelectedDecks;
     private List<String> mUserList;
     private int mUsersInLobby;
+    private boolean mGameIsStarting;
 
 
     /**
      * Default Construcor needed for Firebase usage
      */
     public Lobby(){}
+
+
 
     public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
         mName = _name;
@@ -31,6 +34,7 @@ public class Lobby implements Serializable{
         mWinpoints = _winPoints;
         mLobbyKey = _lobbyID;
         mSelectedDecks = _selectedDecks;
+        mGameIsStarting = false;
         mUsersInLobby = 1;
         mUserList = new ArrayList<String>();
 
@@ -109,6 +113,14 @@ public class Lobby implements Serializable{
 
     public void setmLobbyKey(String mLobbyKey) {
         this.mLobbyKey = mLobbyKey;
+    }
+
+    public boolean ismGameIsStarting() {
+        return mGameIsStarting;
+    }
+
+    public void setmGameIsStarting(boolean mGameIsStarting) {
+        this.mGameIsStarting = mGameIsStarting;
     }
 
  /*   public List<String> getmSelectedDecks() {

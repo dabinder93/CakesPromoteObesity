@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".lobby.CreateLobby" />
         <activity android:name=".lobby.JoinLobby" />
-        <activity android:name=".lobby.LobbyOverview"></activity>
+        <activity android:name=".lobby.LobbyOverview" />
+        <activity android:name=".game.GameActivity"></activity>
     </application>
 
 </manifest>

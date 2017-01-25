@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -90,7 +91,7 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
         }
         textView.setText(b.toString());
 
-        if (lobby.getmPassword() != "") _holder.imgView_pw.setVisibility(View.VISIBLE);
+        if (!lobby.getmPassword().equals("")) _holder.imgView_pw.setVisibility(View.VISIBLE);
         else _holder.imgView_pw.setVisibility(View.GONE);
 
         Button btn = _holder.btn_joinLobby;
@@ -111,7 +112,7 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
                     bundle.putSerializable("LobbyObject", mLobbyList.get(_position));
                     i.putExtras(bundle);
                     mContext.startActivity(i);
-                }
+                }else Toast.makeText(mContext,"Lobby is currently full",Toast.LENGTH_SHORT).show();
             }
         });
     }

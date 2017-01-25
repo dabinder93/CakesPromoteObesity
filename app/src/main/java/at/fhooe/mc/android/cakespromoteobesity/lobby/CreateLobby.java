@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -123,21 +124,23 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 for (int i = 0; i < deckIndexSelected.size(); i++) {
                     selectedDecks.add(deckList.get(deckIndexSelected.get(i)));
                 }
-                
-                //Lobby Objekt
-                mUser.setmIsHost(true);
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey());
-                dbRef.setValue(mUser);
-                mLobbyKey = ref.child("Lobbies").push().getKey();
-                newLobby = new Lobby(name, password, maxPlayer, winPoints, mLobbyKey, selectedDecks, mUser);
-                //Push Lobby Object into Database /Testbranch
-                ref.child("Lobbies").child(mLobbyKey).setValue(newLobby);
 
-                Intent i = new Intent(this, LobbyOverview.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("LobbyObject", newLobby);
-                i.putExtras(bundle);
-                startActivity(i);
+                if (selectedDecks.size() != 0) {
+                    //Lobby Objekt
+                    mUser.setmIsHost(true);
+                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey());
+                    dbRef.setValue(mUser);
+                    mLobbyKey = ref.child("Lobbies").push().getKey();
+                    newLobby = new Lobby(name, password, maxPlayer, winPoints, mLobbyKey, selectedDecks, mUser);
+                    //Push Lobby Object into Database /Testbranch
+                    ref.child("Lobbies").child(mLobbyKey).setValue(newLobby);
+
+                    Intent i = new Intent(this, LobbyOverview.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("LobbyObject", newLobby);
+                    i.putExtras(bundle);
+                    startActivity(i);
+                }else Toast.makeText(this,"No decks selected for your Game",Toast.LENGTH_SHORT).show();
             }break;
         }
     }

@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.ChildEventListener;
@@ -23,7 +25,7 @@ import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
-public class LobbyOverview extends AppCompatActivity {
+public class LobbyOverview extends AppCompatActivity implements View.OnClickListener {
 
     private String mLobbyKey;
     private DatabaseReference ref, lobbyRef;
@@ -32,6 +34,7 @@ public class LobbyOverview extends AppCompatActivity {
     TextView players;
     TextView deckList;
     ListView listView;
+    Button startGame;
     User mUser;
     Lobby lobby;
 
@@ -51,6 +54,8 @@ public class LobbyOverview extends AppCompatActivity {
         players = (TextView) findViewById(R.id.tv_lobbyOv_players);
         deckList = (TextView) findViewById(R.id.tv_lobbyOv_deckList);
         listView = (ListView) findViewById(R.id.lv_playerInLobby);
+        startGame = (Button) findViewById(R.id.btn_lobbyOV_startGame);
+
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
@@ -100,9 +105,24 @@ public class LobbyOverview extends AppCompatActivity {
 
             }
         });
+
+        startGame.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View _view) {
+        if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && lobby.getmUsersInLobby() > 2) {
+            //Game game = new Game(lobby);
+            FirebaseDatabase.getInstance().getReference().child("Games").child(lobby.getmLobbyKey()).setValue(lobby);
+            lobby.setmGameIsStarting(true);
 
+            Intent i = new Intent(this, LobbyOverview.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("LobbyObject", lobby);
+            i.putExtras(bundle);
+            startActivity(i);
+        }else Toast.makeText(this,"There are not enough players to start the Game",Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onBackPressed() {
@@ -119,6 +139,6 @@ public class LobbyOverview extends AppCompatActivity {
         }else {
             FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).removeValue();
         }
-        finish();
+        super.onBackPressed();
     }
 }

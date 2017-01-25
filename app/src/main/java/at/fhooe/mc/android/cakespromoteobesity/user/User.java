@@ -53,7 +53,7 @@ public class User {
         this.mUserGameID = mUserGameID;
     }
 
-    public boolean ismIsHost() {
+    public boolean isHost() {
         return mIsHost;
     }
 
