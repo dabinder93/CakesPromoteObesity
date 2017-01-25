@@ -11,8 +11,8 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
 public class Lobby implements Serializable{
     private String mName;
     private String mPassword;
-    private String mMaxPlayers;
-    private String mWinpoints;
+    private int mMaxPlayers;
+    private int mWinpoints;
     private String mLobbyKey;
     private List<Deck> mSelectedDecks;
     private List<String> mUserList;
@@ -24,7 +24,7 @@ public class Lobby implements Serializable{
      */
     public Lobby(){}
 
-    public Lobby(String _name, String _password, String _maxPlayers, String _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
+    public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
@@ -79,19 +79,19 @@ public class Lobby implements Serializable{
         this.mPassword = mPassword;
     }
 
-    public String getmMaxPlayers() {
+    public int getmMaxPlayers() {
         return mMaxPlayers;
     }
 
-    public void setmMaxPlayers(String mMaxPlayers) {
+    public void setmMaxPlayers(int mMaxPlayers) {
         this.mMaxPlayers = mMaxPlayers;
     }
 
-    public String getmWinpoints() {
+    public int getmWinpoints() {
         return mWinpoints;
     }
 
-    public void setmWinpoints(String mWinpoints) {
+    public void setmWinpoints(int mWinpoints) {
         this.mWinpoints = mWinpoints;
     }
 

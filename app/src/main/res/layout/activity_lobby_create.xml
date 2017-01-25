@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby">
+    tools:context="at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby">
 
     <LinearLayout
         android:orientation="horizontal"

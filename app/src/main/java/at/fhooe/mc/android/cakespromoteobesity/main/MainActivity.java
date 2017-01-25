@@ -9,20 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
-import java.util.List;
-
-import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
-import at.fhooe.mc.android.cakespromoteobesity.lobbysettings.CreateLobby;
+import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{

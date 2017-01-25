@@ -86,6 +86,7 @@ public class JoinLobby extends AppCompatActivity {
                 if (!dataSnapshot.exists()) {
                     Toast.makeText(JoinLobby.this,"There are no open lobbies",Toast.LENGTH_SHORT).show();
                 }else {
+                    mLobbyList = new ArrayList<Lobby>();
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
                         //String key = snap.getKey();
                         //Lobby lobby = snap.child(key).getValue(Lobby.class);

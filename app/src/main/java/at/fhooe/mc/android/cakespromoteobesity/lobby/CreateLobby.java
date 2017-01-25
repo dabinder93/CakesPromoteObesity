@@ -1,4 +1,4 @@
-package at.fhooe.mc.android.cakespromoteobesity.lobbysettings;
+package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import at.fhooe.mc.android.cakespromoteobesity.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
+import at.fhooe.mc.android.cakespromoteobesity.lobby.LobbyOverview;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
@@ -51,6 +52,8 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     private List<String> deckListString;
     String mLobbyKey;
     User mUser = MainActivity.mUser;
+
+    int maxPlayer,winPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +108,13 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
             case R.id.btn_startLobby:{
                 String name = lobbyName.getText().toString();
                 String password = lobbyPassword.getText().toString();
-                String maxPlayer = dropdown_players.getSelectedItem().toString();
-                String winPoints = dropdown_winpoints.getSelectedItem().toString();
+
+                try{
+                    maxPlayer = Integer.parseInt(dropdown_players.getSelectedItem().toString());
+                    winPoints = Integer.parseInt(dropdown_winpoints.getSelectedItem().toString());
+                }catch(NumberFormatException _e) {
+                    _e.printStackTrace();
+                }
                 //deckList List<decks> -> now used
                 //List<String> deckIndexSelected = dropdown_decks.getSelectedStrings();
 

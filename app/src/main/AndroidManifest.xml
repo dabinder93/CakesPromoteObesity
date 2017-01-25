@@ -17,9 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lobbysettings.CreateLobby" />
+        <activity android:name=".lobby.CreateLobby" />
         <activity android:name=".lobby.JoinLobby" />
-        <activity android:name=".lobbysettings.LobbyOverview"></activity>
+        <activity android:name=".lobby.LobbyOverview"></activity>
     </application>
 
 </manifest>

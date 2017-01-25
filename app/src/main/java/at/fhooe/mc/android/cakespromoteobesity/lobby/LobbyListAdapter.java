@@ -1,6 +1,8 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 
 /**
  * Created by Bastian on 21.01.2017.
@@ -67,7 +70,7 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(LobbyListAdapter.ViewHolder _holder, int _position) {
+    public void onBindViewHolder(LobbyListAdapter.ViewHolder _holder, final int _position) {
         final Lobby lobby = mLobbyList.get(_position);
 
         TextView textView = _holder.tv_lobbyName;
@@ -96,6 +99,19 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
             public void onClick(View view) {
                 //Join the lobby
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(lobby.getmLobbyKey());
+                //Toast.makeText(getContext(),"Button wurde gedrückt",Toast.LENGTH_SHORT).show();
+
+                if (mLobbyList.get(_position).getmUsersInLobby() < mLobbyList.get(_position).getmMaxPlayers()) {
+                    mLobbyList.get(_position).getmUserList().add(MainActivity.mUser.getmName());
+                    ref.setValue(mLobbyList.get(_position));
+                    mLobbyList.get(_position).setmUsersInLobby(mLobbyList.get(_position).getmUsersInLobby()+1);
+
+                    Intent i = new Intent(mContext, LobbyOverview.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("LobbyObject", mLobbyList.get(_position));
+                    i.putExtras(bundle);
+                    mContext.startActivity(i);
+                }
             }
         });
     }
