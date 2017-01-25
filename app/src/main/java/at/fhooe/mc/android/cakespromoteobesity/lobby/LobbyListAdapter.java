@@ -103,8 +103,8 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
 
                 if (mLobbyList.get(_position).getmUsersInLobby() < mLobbyList.get(_position).getmMaxPlayers()) {
                     mLobbyList.get(_position).getmUserList().add(MainActivity.mUser.getmName());
-                    ref.setValue(mLobbyList.get(_position));
                     mLobbyList.get(_position).setmUsersInLobby(mLobbyList.get(_position).getmUsersInLobby()+1);
+                    ref.setValue(mLobbyList.get(_position));
 
                     Intent i = new Intent(mContext, LobbyOverview.class);
                     Bundle bundle = new Bundle();

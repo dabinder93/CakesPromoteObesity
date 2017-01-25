@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
@@ -23,7 +26,7 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
 public class LobbyOverview extends AppCompatActivity {
 
     private String mLobbyKey;
-    private DatabaseReference ref;
+    private DatabaseReference ref, lobbyRef;
     TextView hostName;
     TextView lobbyName;
     TextView players;
@@ -78,24 +81,44 @@ public class LobbyOverview extends AppCompatActivity {
             protected void populateView(View v, String model, int position) {
                 TextView textView = (TextView)v.findViewById(android.R.id.text1);
                 textView.setText(model);
-                players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
             }
         };
         listView.setAdapter(firebaseListAdapter);
+
+        lobbyRef = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey);
+        lobbyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    lobby = dataSnapshot.getValue(Lobby.class);
+                    players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {
-        int i = 0;
-        while (true) {
-            if (lobby.getmUserList().get(i) == mUser.getmName()) {
+        for (int i = 0; i < lobby.getmUsersInLobby(); i++) {
+            if (lobby.getmUserList().get(i).equals(mUser.getmName())) {
                 lobby.getmUserList().remove(i);
                 break;
             }
-            i++;
         }
 
         lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
-        FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).setValue(lobby);
+        if (lobby.getmUsersInLobby() > 0) {
+            FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).setValue(lobby);
+        }else {
+            FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).removeValue();
+        }
+        finish();
     }
 }
