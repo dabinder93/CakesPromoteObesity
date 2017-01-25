@@ -56,6 +56,8 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         listView = (ListView) findViewById(R.id.lv_playerInLobby);
         startGame = (Button) findViewById(R.id.btn_lobbyOV_startGame);
 
+        if (mUser.isHost()) startGame.setVisibility(View.VISIBLE);
+        else startGame.setVisibility(View.GONE);
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
