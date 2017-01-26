@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CakesPromoteObesity</string>
+    <string name="app_name">Cakes Promote Obesity</string>
     <string name="btn_txt_createLobby">Create a Lobby</string>
     <string name="btn_txt_joinLobby">Join a Lobby</string>
     <string name="tv_txt_players">Max Players:</string>

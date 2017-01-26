@@ -102,6 +102,12 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                     lobby = dataSnapshot.getValue(Lobby.class);
                     players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
                     if(lobby.ismGameIsStarting()){
+                        lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
+                        if(lobby.getmUsersInLobby()!=0){
+                            lobbyRef.setValue(lobby);
+                        }else{
+                            lobbyRef.removeValue();
+                        }
                         Intent i = new Intent(LobbyOverview.this, GameActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("GameKey", lobby.getmLobbyKey());
@@ -126,7 +132,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
             Game game = new Game(lobby);
             FirebaseDatabase.getInstance().getReference().child("Games").child(lobby.getmLobbyKey()).setValue(game);
             lobby.setmGameIsStarting(true);
-
+            lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
             FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).setValue(lobby);
 
             Intent i = new Intent(this, GameActivity.class);
