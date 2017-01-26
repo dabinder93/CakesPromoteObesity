@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 
 public class JoinLobby extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class JoinLobby extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_join);
+
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView_lobby_list);
         //mRecyclerView.setHasFixedSize(true);
 

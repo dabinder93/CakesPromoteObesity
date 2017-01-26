@@ -19,6 +19,7 @@ import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
+import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 /**
  * Created by Bastian on 21.01.2017.
@@ -28,6 +29,7 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
 
     private List<Lobby> mLobbyList;
     private Context mContext;
+    private User mUser;
 
     public LobbyListAdapter(Context _context, final List<Lobby> _obj) {
         mLobbyList = _obj;
@@ -103,9 +105,16 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
                 //Toast.makeText(getContext(),"Button wurde gedrückt",Toast.LENGTH_SHORT).show();
 
                 if (mLobbyList.get(_position).getmUsersInLobby() < mLobbyList.get(_position).getmMaxPlayers()) {
-                    mLobbyList.get(_position).getmUserList().add(MainActivity.mUser.getmName());
+                    mUser = MainActivity.mUser;
+                    mLobbyList.get(_position).getmUserList().add(mUser.getmName());
                     mLobbyList.get(_position).setmUsersInLobby(mLobbyList.get(_position).getmUsersInLobby()+1);
                     ref.setValue(mLobbyList.get(_position));
+
+                    mUser.setmUserGameID(mLobbyList.get(_position).getmUsersInLobby()-1);
+
+                    mUser.setmIsHost(false);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey()).setValue(mUser);
+                    MainActivity.mUser = mUser;
 
                     Intent i = new Intent(mContext, LobbyOverview.class);
                     Bundle bundle = new Bundle();

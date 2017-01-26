@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.game.Game;
+import at.fhooe.mc.android.cakespromoteobesity.game.GameActivity;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
@@ -99,6 +101,13 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                 if (dataSnapshot.exists()) {
                     lobby = dataSnapshot.getValue(Lobby.class);
                     players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
+                    if(lobby.ismGameIsStarting()){
+                        Intent i = new Intent(LobbyOverview.this, GameActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("GameKey", lobby.getmLobbyKey());
+                        i.putExtras(bundle);
+                        startActivity(i);
+                    }
                 }
             }
 
@@ -113,16 +122,19 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View _view) {
-        if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && lobby.getmUsersInLobby() > 2) {
-            //Game game = new Game(lobby);
-            FirebaseDatabase.getInstance().getReference().child("Games").child(lobby.getmLobbyKey()).setValue(lobby);
+        if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && lobby.getmUsersInLobby() > 1) {
+            Game game = new Game(lobby);
+            FirebaseDatabase.getInstance().getReference().child("Games").child(lobby.getmLobbyKey()).setValue(game);
             lobby.setmGameIsStarting(true);
 
-            Intent i = new Intent(this, LobbyOverview.class);
+            FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).setValue(lobby);
+
+            Intent i = new Intent(this, GameActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("LobbyObject", lobby);
+            bundle.putSerializable("GameKey", lobby.getmLobbyKey());
             i.putExtras(bundle);
             startActivity(i);
+
         }else Toast.makeText(this,"There are not enough players to start the Game",Toast.LENGTH_LONG).show();
     }
 

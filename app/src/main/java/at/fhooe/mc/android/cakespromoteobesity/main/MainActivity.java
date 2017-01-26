@@ -109,7 +109,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-   /* void enterPlayerName() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        usersRef.child(mUser.getmUserKey()).removeValue();
+        mUser = null;
+    }
+
+    /* void enterPlayerName() {
 
             //User has not entered a name yet
             AlertDialog.Builder playerNameDialog = new AlertDialog.Builder(this);

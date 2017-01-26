@@ -128,6 +128,8 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 if (selectedDecks.size() != 0) {
                     //Lobby Objekt
                     mUser.setmIsHost(true);
+                    mUser.setmUserGameID(0);
+                    MainActivity.mUser = mUser;
                     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey());
                     dbRef.setValue(mUser);
                     mLobbyKey = ref.child("Lobbies").push().getKey();
