@@ -17,6 +17,10 @@ import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
+/**
+ * Entrance Activity of the App which represents the Options to Join or Create a Lobby
+ * and the Option to enter a User Name for the Game.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity Test";
     private Button mJoinLobby, mCreateLobby;
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        //If you already entered a UserName and get Back to the Activity, the Option to enter a Username
+        //will be disabled
         if (mUser != null) {
             et_playerName.setVisibility(View.GONE);
             findViewById(R.id.tv_playerName).setVisibility(View.GONE);
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View _view) {
         switch (_view.getId()) {
+            //Leads to CreateLobby Activity and Pushes User to Firebase, if the entered Username Letter Size is > 3
             case R.id.btn_createLobby: {
                 i = new Intent(this, CreateLobby.class);
                 if (mUser == null) {
@@ -112,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //Removes User from Database when App is Destroyed
         usersRef.child(mUser.getmUserKey()).removeValue();
         mUser = null;
     }

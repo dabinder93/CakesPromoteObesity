@@ -15,7 +15,6 @@
         android:text="@string/btn_main_text_createLobby"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@"
         android:id="@+id/btn_createLobby"
         />
 

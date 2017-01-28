@@ -27,6 +27,10 @@ import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
+/**
+ * Displays the Name and Settings of the Lobby
+ * and a List of all Players which are currently in the Lobby.
+ */
 public class LobbyOverview extends AppCompatActivity implements View.OnClickListener {
 
     private String mLobbyKey;
@@ -58,6 +62,8 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         listView = (ListView) findViewById(R.id.lv_playerInLobby);
         startGame = (Button) findViewById(R.id.btn_lobbyOV_startGame);
 
+        //Sets visibility of the "Start Game" Button for the Host
+        //Disabled for Players who joined the Lobby
         if (mUser.isHost()) startGame.setVisibility(View.VISIBLE);
         else startGame.setVisibility(View.GONE);
 
@@ -83,7 +89,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
 
 
 
-        //Set Reference to userList in lobby
+        //Set Reference to userList in lobby and display the players, which are currently in Lobby in the Listview
         ref = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).child("mUserList");
         FirebaseListAdapter<String> firebaseListAdapter = new FirebaseListAdapter<String>(this, String.class, android.R.layout.simple_list_item_1, ref) {
             @Override
@@ -100,9 +106,13 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     lobby = dataSnapshot.getValue(Lobby.class);
+                    //Refreshes the Current Players in Lobby Count whenever someone joins or leaves the Lobby
                     players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
+                    //When Host is Starting the Game
                     if(lobby.ismGameIsStarting()){
+                        //Reduce UsersInLobby by 1 and push
                         lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
+                        //if there are still players in Lobby, refresh Lobby, else Delete the Lobby
                         if(lobby.getmUsersInLobby()!=0){
                             lobbyRef.setValue(lobby);
                         }else{
@@ -128,7 +138,10 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View _view) {
+        //Start the Game if there are more then 3 Users in Lobby
         if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && lobby.getmUsersInLobby() > 1) {
+            //Creates new Game Object and pushes it into Database with same GameID as LobbyID + setGameIsStarting
+            //so that other Player get notification and get into new Activity
             Game game = new Game(lobby);
             FirebaseDatabase.getInstance().getReference().child("Games").child(lobby.getmLobbyKey()).setValue(game);
             lobby.setmGameIsStarting(true);
@@ -146,6 +159,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
+        //When leaving the Lobby by BackPress, remove yourself(User) from the UserList
         for (int i = 0; i < lobby.getmUsersInLobby(); i++) {
             if (lobby.getmUserList().get(i).equals(mUser.getmName())) {
                 lobby.getmUserList().remove(i);
@@ -153,6 +167,8 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
             }
         }
 
+        //reduce UserInLobby by 1 and if there are still users in the Lobby, Just update LobbyRef
+        //else remove the Lobby
         lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
         if (lobby.getmUsersInLobby() > 0) {
             FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyKey).setValue(lobby);

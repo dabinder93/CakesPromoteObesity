@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-//Class from the Internet, provides Multi selection Spinner
+/**
+ * Spinner with Multiple Checkboxes for multiple selection of items
+ */
 public class MultiSelectionSpinner extends Spinner implements
         DialogInterface.OnMultiChoiceClickListener
 {
@@ -143,6 +145,10 @@ public class MultiSelectionSpinner extends Spinner implements
         simple_adapter.add(buildSelectedItemString());
     }
 
+    /**
+     * Get a List of Strings of the Selected Items
+     * @return String List filled with the Selected Itemss Text of the Multiple Spinner
+     */
     public List<String> getSelectedStrings() {
         List<String> selection = new LinkedList<String>();
         for (int i = 0; i < _items.length; ++i) {
@@ -153,6 +159,11 @@ public class MultiSelectionSpinner extends Spinner implements
         return selection;
     }
 
+
+    /**
+     * Gets a List with selected Item Positions
+     * @return Integer List with index of the selected Items in the Multiple Spinner
+     */
     public List<Integer> getSelectedIndicies() {
         List<Integer> selection = new LinkedList<Integer>();
         for (int i = 0; i < _items.length; ++i) {
