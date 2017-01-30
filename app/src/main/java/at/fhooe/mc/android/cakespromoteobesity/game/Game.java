@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.DeckGame;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
 
@@ -22,15 +23,25 @@ public class Game implements Serializable{
     private int mResourcesCount;
     private List<Deck> mSelectedDecks;
     private int mUsersInLobby;
-    private int mUseresInGame;
+    private int mUsersInGame;
     private boolean mRunGame;
     private int mCzarID;
     private int mTimerForCzar;
     private int mTimerForPlayer;
     private CurrentRound mCurrentRound;
     private List<UserGame> mUserGameList;
+    private List<DeckGame> mCardsInUse;
 
     public Game(){}
+
+    public List<DeckGame> getmCardsInUse() {
+        return mCardsInUse;
+    }
+
+    public void setmCardsInUse(List<DeckGame> mCardsInUse) {
+        this.mCardsInUse = mCardsInUse;
+    }
+
     public Game(Lobby _lobby) {
         mName = _lobby.getmName();
         mWinpoints = _lobby.getmWinpoints();
@@ -38,17 +49,24 @@ public class Game implements Serializable{
         mSelectedDecks = _lobby.getmDecks();
         mResourcesCount = _lobby.getmDecks().size();
         mUsersInLobby = _lobby.getmUsersInLobby();
-        mUseresInGame = 0;
+        mUsersInGame = 0;
         mRunGame = false;
-        mCzarID = (int) (Math.random()*mUsersInLobby);
+        //mCzarID = (int) (Math.random()*mUsersInLobby);
+        mCzarID = 0;
         mTimerForCzar = 60;
         mTimerForPlayer = 60;
-        mUserGameList = new ArrayList<UserGame>();
+
+        mUserGameList = new ArrayList<>();
 
         for (String user:_lobby.getmUserList()){
             mUserGameList.add(new UserGame(user));
         }
         mCurrentRound = new CurrentRound(60);
+
+        mCardsInUse = new ArrayList<>();
+        for (Deck deck : _lobby.getmDecks()) {
+            mCardsInUse.add(new DeckGame(deck.getmDeckName()));
+        }
 
 
     }
@@ -101,12 +119,12 @@ public class Game implements Serializable{
         this.mUsersInLobby = mUsersInLobby;
     }
 
-    public int getmUseresInGame() {
-        return mUseresInGame;
+    public int getmUsersInGame() {
+        return mUsersInGame;
     }
 
-    public void setmUseresInGame(int mUseresInGame) {
-        this.mUseresInGame = mUseresInGame;
+    public void setmUsersInGame(int mUsersInGame) {
+        this.mUsersInGame = mUsersInGame;
     }
 
     public boolean ismRunGame() {

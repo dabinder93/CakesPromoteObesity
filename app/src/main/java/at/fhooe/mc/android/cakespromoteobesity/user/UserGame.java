@@ -21,9 +21,14 @@ public class UserGame implements Serializable {
     public UserGame(String _name){
         mName = _name;
         mCardCount = 0;
-        mCardsInHand = new ArrayList<String>();
+        mCardsInHand = new ArrayList<>();
         mPoints = 0;
         mSelectedCard = "";
+    }
+
+    public void addCardToHand(String cardText) {
+        if (mCardsInHand == null) mCardsInHand = new ArrayList<>();
+            mCardsInHand.add(cardText);
     }
 
     public String getmName() {

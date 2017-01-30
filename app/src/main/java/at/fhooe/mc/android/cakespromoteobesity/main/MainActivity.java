@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         //Removes User from Database when App is Destroyed
-        usersRef.child(mUser.getmUserKey()).removeValue();
-        mUser = null;
+        if (mUser != null) {
+            usersRef.child(mUser.getmUserKey()).removeValue();
+            mUser = null;
+        }
     }
 
     /* void enterPlayerName() {
