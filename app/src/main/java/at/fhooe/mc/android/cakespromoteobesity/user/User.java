@@ -16,7 +16,11 @@ import java.util.Map;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 
 /**
- * Created by David on 18.01.2017.
+ * User Object gets saved in the Users-Branch in the Firebase DB
+ * In a Lobby there is only a UserName-List saved
+ * In a Game the Users are saved as a (extended) UserGame Object in a List
+ * The user itself is most commonly used for checking variables without having to go
+ * into a deep level of the DB
  */
 public class User {
 

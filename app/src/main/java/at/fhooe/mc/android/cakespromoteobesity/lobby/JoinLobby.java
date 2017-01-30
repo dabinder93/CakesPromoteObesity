@@ -20,6 +20,11 @@ import java.util.List;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 
+/**
+ * Displays all available open lobbies where a player can connect to
+ * The list is implemented via a RecyclerView and the Lobby-Items get built up
+ * with the LobbyListAdapter class
+ */
 public class JoinLobby extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -41,41 +46,6 @@ public class JoinLobby extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         ref = FirebaseDatabase.getInstance().getReference().child("Lobbies");
-
-        //mAdapter = new LobbyListAdapter(this,mLobbyList);
-        //mRecyclerView.setAdapter(mAdapter);
-
-        //setUpLobbyList();
-
-
-
-
-
-        /*ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                getAllLobbies(dataSnapshot);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                getAllLobbies(dataSnapshot);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                getAllLobbies(dataSnapshot);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });*/
-
 
     }
 

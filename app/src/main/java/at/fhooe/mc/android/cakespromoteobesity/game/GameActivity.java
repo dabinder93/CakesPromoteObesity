@@ -16,6 +16,10 @@ import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
+/**
+ * This is the class which has the logic of the game and does push- and retrieves from the Firebase DB
+ * Has a ValueEventListener which will retrieve the Game-Object from the DB when someone makes changes to it
+ */
 public class GameActivity extends AppCompatActivity {
 
     private Game mGame;

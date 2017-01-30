@@ -1,4 +1,4 @@
-package at.fhooe.mc.android.cakespromoteobesity.game;
+package at.fhooe.mc.android.cakespromoteobesity.card;
 
 /**
  * Created by David on 26.01.2017.

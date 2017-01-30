@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Bastian on 25.01.2017.
- */
+import at.fhooe.mc.android.cakespromoteobesity.card.CardWithUser;
 
+/**
+ * CurrentRound Objects get created when there is a new game created.
+ * In every game there is only 1 instance of CurrentRound
+ * The czar will decrement the Countdown
+ */
 public class CurrentRound implements Serializable {
 
     private List<CardWithUser> mCardWithUserList;

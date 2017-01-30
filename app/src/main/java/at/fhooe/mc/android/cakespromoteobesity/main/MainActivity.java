@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mUser == null) {
                     mPlayerName = et_playerName.getText().toString();
                     if(mPlayerName.length() < 4){
-                        Toast.makeText(this, "Playername must have at least 4 Letters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Your user name must have at least 4 letters", Toast.LENGTH_SHORT).show();
                         //enterPlayerName();
 
                     }else{

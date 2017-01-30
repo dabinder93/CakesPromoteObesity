@@ -22,9 +22,10 @@ import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 /**
- * Created by Bastian on 21.01.2017.
+ * LobbyListAdapter is building up the Lobby Items for the List
+ * It gets the items TextViews,Buttons,... from the activity_lobby_item.xml file
+ * It also includes the OnClickListener for the Join-Buttons that will get the player into the lobby
  */
-
 public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.ViewHolder> {
 
     private List<Lobby> mLobbyList;

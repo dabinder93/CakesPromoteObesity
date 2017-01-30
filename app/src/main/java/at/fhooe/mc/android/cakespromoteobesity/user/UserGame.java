@@ -1,14 +1,14 @@
-package at.fhooe.mc.android.cakespromoteobesity.game;
+package at.fhooe.mc.android.cakespromoteobesity.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Bastian on 25.01.2017.
+ * UserGame is a special User type which gets saved in a Game Object (as a whole List of all Users)
+ * it has specific variables in use like the Cards in the User's hand or his/her points.
  */
-
-public class UserGame implements Serializable{
+public class UserGame implements Serializable {
 
     private String mName;
     private int mCardCount;

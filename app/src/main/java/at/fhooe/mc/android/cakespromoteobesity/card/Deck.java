@@ -1,11 +1,12 @@
-package at.fhooe.mc.android.cakespromoteobesity;
+package at.fhooe.mc.android.cakespromoteobesity.card;
 
 import java.io.Serializable;
 
 /**
- * Created by David on 16.01.2017.
+ * Deck Objects are used when creating a new game.
+ * The spinner calls the Firebase DB in the "Decks" Branch to
+ * showcase all available Decks a User can choose for his/her game
  */
-
 public class Deck implements Serializable{
 
     private String mDeckName;

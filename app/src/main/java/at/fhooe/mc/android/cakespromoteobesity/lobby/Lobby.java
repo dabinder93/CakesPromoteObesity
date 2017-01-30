@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhooe.mc.android.cakespromoteobesity.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
-
+/**
+ * Lobby Object, with all needed Variables
+ * Constructor only gets called when a user creates a lobby
+ * Default constructor needed for Firebase
+ */
 public class Lobby implements Serializable{
     private String mName;
     private String mPassword;
@@ -24,8 +28,6 @@ public class Lobby implements Serializable{
      * Default Construcor needed for Firebase usage
      */
     public Lobby(){}
-
-
 
     public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
         mName = _name;

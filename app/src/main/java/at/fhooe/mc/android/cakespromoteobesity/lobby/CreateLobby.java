@@ -19,14 +19,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhooe.mc.android.cakespromoteobesity.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner;
-import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
-import at.fhooe.mc.android.cakespromoteobesity.lobby.LobbyOverview;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
+/**
+ * Allows the user to create a Game with his/her preferenced settings
+ * Has a reference to Firebase to get all the available decks
+ * Upon clicking the Butoon at the bottom, a Lobby Object will be uploaded to the Database and
+ * will then be added to the List of all Lobbies
+ */
 public class CreateLobby extends AppCompatActivity implements View.OnClickListener{
 
     //References to Database

@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhooe.mc.android.cakespromoteobesity.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
+import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
 
 /**
- * Created by Bastian on 25.01.2017.
+ * A Game Objects includes all needed variables and lists for a game to work
+ * The Host of a Lobby will create a new Game Object and upload it to the Firebase DB,
+ * which the other Users then will retrieve from the DB
  */
 public class Game implements Serializable{
 
