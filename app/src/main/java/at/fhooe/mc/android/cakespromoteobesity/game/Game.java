@@ -24,7 +24,8 @@ public class Game implements Serializable{
     private List<Deck> mSelectedDecks;
     private int mUsersInLobby;
     private int mUsersInGame;
-    private boolean mRunGame;
+    //private boolean mRunGame;
+    private int mGameStatus;
     private int mCzarID;
     private int mTimerForCzar;
     private int mTimerForPlayer;
@@ -34,12 +35,8 @@ public class Game implements Serializable{
 
     public Game(){}
 
-    public List<DeckGame> getmCardsInUse() {
-        return mCardsInUse;
-    }
-
-    public void setmCardsInUse(List<DeckGame> mCardsInUse) {
-        this.mCardsInUse = mCardsInUse;
+    public void setmGameStatus(int mGameStatus) {
+        this.mGameStatus = mGameStatus;
     }
 
     public Game(Lobby _lobby) {
@@ -50,14 +47,14 @@ public class Game implements Serializable{
         mResourcesCount = _lobby.getmDecks().size();
         mUsersInLobby = _lobby.getmUsersInLobby();
         mUsersInGame = 0;
-        mRunGame = false;
+        //mRunGame = false;
+        mGameStatus = 0;
         //mCzarID = (int) (Math.random()*mUsersInLobby);
         mCzarID = 0;
         mTimerForCzar = 60;
         mTimerForPlayer = 60;
 
         mUserGameList = new ArrayList<>();
-
         for (String user:_lobby.getmUserList()){
             mUserGameList.add(new UserGame(user));
         }
@@ -67,8 +64,6 @@ public class Game implements Serializable{
         for (Deck deck : _lobby.getmDecks()) {
             mCardsInUse.add(new DeckGame(deck.getmDeckName()));
         }
-
-
     }
 
     public String getmName() {
@@ -127,13 +122,13 @@ public class Game implements Serializable{
         this.mUsersInGame = mUsersInGame;
     }
 
-    public boolean ismRunGame() {
+    /*public boolean ismRunGame() {
         return mRunGame;
-    }
+    }*/
 
-    public void setmRunGame(boolean mRunGame) {
+    /*public void setmRunGame(boolean mRunGame) {
         this.mRunGame = mRunGame;
-    }
+    }*/
 
     public int getmCzarID() {
         return mCzarID;
@@ -175,4 +170,15 @@ public class Game implements Serializable{
         this.mUserGameList = mUserGameList;
     }
 
+    public List<DeckGame> getmCardsInUse() {
+        return mCardsInUse;
+    }
+
+    public void setmCardsInUse(List<DeckGame> mCardsInUse) {
+        this.mCardsInUse = mCardsInUse;
+    }
+
+    public int getmGameStatus() {
+        return mGameStatus;
+    }
 }

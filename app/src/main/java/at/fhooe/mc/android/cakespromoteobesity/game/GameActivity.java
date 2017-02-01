@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,10 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
@@ -58,28 +54,47 @@ public class GameActivity extends AppCompatActivity {
         allPlayersJoined = false;
         synchro = new Object();
         //Get game passed from Intent
-        final String mGameKey = (String) bundle.getSerializable("GameKey");
+        //final String mGameKey = (String) bundle.getSerializable("GameKey");
+        mGame = (Game) bundle.getSerializable("GameKey");
 
-        //synchronized (synchro) {
-            ref.child(mGameKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mGame = dataSnapshot.getValue(Game.class);
-                    mGame.setmUsersInGame(mGame.getmUsersInGame() + 1);
-                    ref.child(mGameKey).setValue(mGame);
-                    Log.i("GameActivity", "increasing usersInGame");
-                    //synchro.notify();
-                    blabla = false;
-                    Log.i("GameActivity", Thread.currentThread().getName() + "1. DataChange");
-                }
+        ref.child(mGame.getmGameKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mGame = dataSnapshot.getValue(Game.class);
+                mGame.setmUsersInGame(mGame.getmUsersInGame() + 1);
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.i("GameActivity", "in on Cancelled");
-                }
-            });
-        //}
+                //Get GameStatus to 1 if all Players joined
+                if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
 
+                ref.child(mGame.getmGameKey()).setValue(mGame);
+                Log.i("GameActivity", "increasing usersInGame");
+                //synchro.notify();
+                blabla = false;
+                Log.i("GameActivity", Thread.currentThread().getName() + "1. DataChange");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("GameActivity", "in on Cancelled");
+            }
+        });
+
+        //Host holt Karten lokal aus - Ignore
+        /*if (mUser.isHost()) {
+            for (Deck deck : mGame.getmSelectedDecks()) {
+                FirebaseDatabase.getInstance().getReference().child("Resources").child(deck.getmDeckID()).child("Responses").child("Deck").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        responsesList = dataSnapshot.getValue(ResponseDeck.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }*/
 
         /*synchronized (synchro){
             while(blabla){
@@ -92,22 +107,38 @@ public class GameActivity extends AppCompatActivity {
             }
         }*/
 
-        ref.child(mGameKey).addValueEventListener(new ValueEventListener() {
+        ref.child(mGame.getmGameKey()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGame = dataSnapshot.getValue(Game.class);
                 Log.i("GameActivity", "mGame is overwritten");
-                if (mGame.getmUsersInGame() == mGame.getmUsersInLobby() && mUser.isHost() && firstRound) {
+                /*if (mGame.getmUsersInGame() == mGame.getmUsersInLobby() && mUser.isHost() && firstRound) {
                     firstRound = false;
-                    mGame.setmRunGame(true);
-                    ref.child(mGameKey).setValue(mGame);
+                    //mGame.setmRunGame(true);
+                    mGame.setmGameStatus(1);
+                    ref.child(mGame.getmGameKey()).setValue(mGame);
                     allPlayersJoined = true;
                     //blabla = false;
                     Log.i("GameActivity", Thread.currentThread().getName() + "2. DataChange");
                     synchronized (synchro){
                         synchro.notify();
                     }
+                }*/
+
+                Log.i("GameActivity", "GameStatus has value " + String.valueOf(mGame.getmGameStatus()));
+                switch (mGame.getmGameStatus()) {
+                    case 0 : {
+                        //nothing (new) should happen
+                    }break;
+                    case 1 : {
+                        //Host is filling missing Cards up
+                        if (mUser.isHost()) fillCardsUp();
+                    }break;
+                    case 2 : {
+                        //Round starting, Prompt gets played
+                    }break;
                 }
+
             }
 
             @Override
@@ -137,6 +168,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void fillCardsUp() {
+        //set the Status to 0 - no new methods get created when mGame gets updated in the DB
+        mGame.setmGameStatus(0);
         for (int userIndex = 0; userIndex < mGame.getmUsersInGame(); userIndex++) {
             for (int cardsInHand = mGame.getmUserGameList().get(userIndex).getmCardCount(); cardsInHand < 10; ) {//; cardsInHand++) {
                 boolean cardIsChecked = true;
@@ -168,10 +201,11 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
-        ref.child(mGame.getmGameKey()).setValue(mGame);
+        //Cards get pushed in the fetchedResponse() method now
+        //ref.child(mGame.getmGameKey()).setValue(mGame);
     }
 
-    private void fetchResponse(int _cardID, String _resourceName, UserGame _userGame, int _userIndex) {
+    private void fetchResponse(int _cardID, String _resourceName, UserGame _userGame, final int _userIndex) {
         waitForListener = true;
         FirebaseDatabase.getInstance().getReference().child("Resources").child(_resourceName).child("Responses").child("Deck").child(String.valueOf(_cardID))
                 .child("Response").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -181,6 +215,14 @@ public class GameActivity extends AppCompatActivity {
                 Log.i("Fetch Data", "Response = " + response);
                 waitForListener = false;
                 //Log.i("Fetch Data","Add Response to hand");
+                mGame.getmUserGameList().get(_userIndex).addCardToHand(response);
+                mGame.getmUserGameList().get(_userIndex).setmCardCount(mGame.getmUserGameList().get(_userIndex).getmCardCount() + 1);
+
+                //Check if all cards are filled up, start the Round = 2
+                if (_userIndex ==  mGame.getmUserGameList().size()-1 && mGame.getmUserGameList().get(_userIndex).getmCardCount() == 10) mGame.setmGameStatus(2);
+
+                //Push the Game to the DB
+                ref.child(mGame.getmGameKey()).setValue(mGame);
             }
 
             @Override
@@ -189,11 +231,10 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        while (waitForListener) {
+        /*while (waitForListener) {
 
-        }
-        mGame.getmUserGameList().get(_userIndex).addCardToHand(response);
-        mGame.getmUserGameList().get(_userIndex).setmCardCount(mGame.getmUserGameList().get(_userIndex).getmCardCount() + 1);
+        }*/
+
     }
 }
 
