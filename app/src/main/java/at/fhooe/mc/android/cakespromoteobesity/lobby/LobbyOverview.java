@@ -120,7 +120,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                         }
                         Intent i = new Intent(LobbyOverview.this, GameActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("GameKey", new Game());
+                        bundle.putSerializable("GameKey", mLobbyKey);
                         i.putExtras(bundle);
                         startActivity(i);
                     }
@@ -150,7 +150,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
 
             Intent i = new Intent(this, GameActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("GameKey", game);
+            bundle.putSerializable("GameKey", mLobbyKey);
             i.putExtras(bundle);
             startActivity(i);
 

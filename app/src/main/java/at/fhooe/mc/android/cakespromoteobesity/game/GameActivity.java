@@ -33,10 +33,6 @@ public class GameActivity extends AppCompatActivity {
     private volatile boolean allPlayersJoined;
     private List<DeckGame> mCardsInUse;
     private String response;
-    private boolean waitForListener;
-    private boolean firstRound;
-    private volatile boolean blabla;
-    private Object synchro;
 
 
     @Override
@@ -48,28 +44,28 @@ public class GameActivity extends AppCompatActivity {
         Log.i("GameActivity", Thread.currentThread().getName() + "OnCreate");
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
-        blabla = true;
         mCardsInUse = new ArrayList<DeckGame>();
-        firstRound = true;
         allPlayersJoined = false;
-        synchro = new Object();
         //Get game passed from Intent
-        //final String mGameKey = (String) bundle.getSerializable("GameKey");
-        mGame = (Game) bundle.getSerializable("GameKey");
+        final String mGameKey = (String) bundle.getSerializable("GameKey");
 
-        ref.child(mGame.getmGameKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child(mGameKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGame = dataSnapshot.getValue(Game.class);
                 mGame.setmUsersInGame(mGame.getmUsersInGame() + 1);
+
+                //Set mCardsInUse
+                for (Deck deck : mGame.getmSelectedDecks()) {
+                    mCardsInUse.add(new DeckGame(deck.getmDeckID()));
+                }
+
 
                 //Get GameStatus to 1 if all Players joined
                 if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
 
                 ref.child(mGame.getmGameKey()).setValue(mGame);
                 Log.i("GameActivity", "increasing usersInGame");
-                //synchro.notify();
-                blabla = false;
                 Log.i("GameActivity", Thread.currentThread().getName() + "1. DataChange");
             }
 
@@ -107,7 +103,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }*/
 
-        ref.child(mGame.getmGameKey()).addValueEventListener(new ValueEventListener() {
+        ref.child(mGameKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGame = dataSnapshot.getValue(Game.class);
@@ -158,12 +154,12 @@ public class GameActivity extends AppCompatActivity {
             }
         }*/
         Log.i("GameActivity", "left while");
-        if (mUser.isHost()) {
+        /*if (mUser.isHost()) {
             for (Deck deck : mGame.getmSelectedDecks()) {
                 mCardsInUse.add(new DeckGame(deck.getmDeckID()));
             }
             fillCardsUp();
-        }
+        }*/
         //runGameSequence();
     }
 
@@ -171,7 +167,8 @@ public class GameActivity extends AppCompatActivity {
         //set the Status to 0 - no new methods get created when mGame gets updated in the DB
         mGame.setmGameStatus(0);
         for (int userIndex = 0; userIndex < mGame.getmUsersInGame(); userIndex++) {
-            for (int cardsInHand = mGame.getmUserGameList().get(userIndex).getmCardCount(); cardsInHand < 10; ) {//; cardsInHand++) {
+            int cardCount = mGame.getmUserGameList().get(userIndex).getmCardCount();
+            for (int cardsInHand = cardCount; cardsInHand < 10; cardsInHand++) {
                 boolean cardIsChecked = true;
                 while (cardIsChecked) {
                     int resourceID = (int) (Math.random() * mGame.getmResourcesCount());
@@ -206,20 +203,26 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void fetchResponse(int _cardID, String _resourceName, UserGame _userGame, final int _userIndex) {
-        waitForListener = true;
+        Log.i("GameActivity","Entered fetchResponse");
         FirebaseDatabase.getInstance().getReference().child("Resources").child(_resourceName).child("Responses").child("Deck").child(String.valueOf(_cardID))
                 .child("Response").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 response = dataSnapshot.getValue(String.class);
                 Log.i("Fetch Data", "Response = " + response);
-                waitForListener = false;
                 //Log.i("Fetch Data","Add Response to hand");
                 mGame.getmUserGameList().get(_userIndex).addCardToHand(response);
                 mGame.getmUserGameList().get(_userIndex).setmCardCount(mGame.getmUserGameList().get(_userIndex).getmCardCount() + 1);
 
                 //Check if all cards are filled up, start the Round = 2
                 if (_userIndex ==  mGame.getmUserGameList().size()-1 && mGame.getmUserGameList().get(_userIndex).getmCardCount() == 10) mGame.setmGameStatus(2);
+
+                //let the listener have some time, he is so old and slow
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 //Push the Game to the DB
                 ref.child(mGame.getmGameKey()).setValue(mGame);
@@ -230,16 +233,11 @@ public class GameActivity extends AppCompatActivity {
 
             }
         });
-
-        /*while (waitForListener) {
-
-        }*/
-
+        Log.i("GameActivity","End of fetchResponse");
     }
 }
 
  /*   private void runGameSequence() {
-
         //Karten auffüllen
         if (mUser.getmUserGameID() == mGame.getmCzarID()) {
 
