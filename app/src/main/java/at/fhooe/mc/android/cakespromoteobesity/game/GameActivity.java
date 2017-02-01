@@ -41,7 +41,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         mUser = MainActivity.mUser;
 
-        Log.i("GameActivity", Thread.currentThread().getName() + "OnCreate");
+        Log.i("GameActivity", Thread.currentThread().getName() + " OnCreate");
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         mCardsInUse = new ArrayList<DeckGame>();
@@ -66,8 +66,7 @@ public class GameActivity extends AppCompatActivity {
                 if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
 
                 ref.child(mGame.getmGameKey()).setValue(mGame);
-                Log.i("GameActivity", "increasing usersInGame");
-                Log.i("GameActivity", Thread.currentThread().getName() + "1. DataChange");
+                Log.i("GameActivity", "increasing usersInGame to " + mGame.getmUsersInGame());
             }
 
             @Override
