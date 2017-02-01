@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,11 +50,25 @@ public class GameActivity extends AppCompatActivity {
         //Get game passed from Intent
         final String mGameKey = (String) bundle.getSerializable("GameKey");
 
+        //wait for random time up to a second -> so 2 users cant join at the same time
+        try {
+            Thread.sleep(mUser.getmUserGameID()*200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ref.child(mGameKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGame = dataSnapshot.getValue(Game.class);
                 mGame.setmUsersInGame(mGame.getmUsersInGame() + 1);
+
+                //Get GameStatus to 1 if all Players joined
+                if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
+
+                ref.child(mGame.getmGameKey()).setValue(mGame);
+                Toast.makeText(GameActivity.this,"usersInGame is " + mGame.getmUsersInGame(), Toast.LENGTH_SHORT).show();
+                Log.i("GameActivity", "increasing usersInGame to " + mGame.getmUsersInGame());
 
                 //Set mCardsInUse
                 if (mUser.isHost()) {
@@ -61,12 +76,6 @@ public class GameActivity extends AppCompatActivity {
                         mCardsInUse.add(new DeckGame(deck.getmDeckID()));
                     }
                 }
-
-                //Get GameStatus to 1 if all Players joined
-                if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
-
-                ref.child(mGame.getmGameKey()).setValue(mGame);
-                Log.i("GameActivity", "increasing usersInGame to " + mGame.getmUsersInGame());
             }
 
             @Override
@@ -127,7 +136,8 @@ public class GameActivity extends AppCompatActivity {
                     for (DeckGame deck : mCardsInUse) {
                         if (deck.getmDeckName().equals(mGame.getmSelectedDecks().get(resourceID).getmDeckID())) {
                             try {
-                                Thread.sleep(10+(deck.getmCardResponsesID().size()*10));
+                                //Thread.sleep(10+(deck.getmCardResponsesID().size()*10));
+                                Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();e.printStackTrace();
                             }
