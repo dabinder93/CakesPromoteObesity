@@ -76,12 +76,6 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         ref.child(mGameKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -118,6 +112,11 @@ public class GameActivity extends AppCompatActivity {
             ref.child(mGame.getmGameKey()).setValue(mGame);
         }
         for (int userIndex = 0; userIndex < mGame.getmUsersInGame(); userIndex++) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             int cardCount = mGame.getmUserGameList().get(userIndex).getmCardCount();
             for (int cardsInHand = cardCount; cardsInHand < 10; cardsInHand++) {
                 boolean cardIsChecked = true;
@@ -129,7 +128,7 @@ public class GameActivity extends AppCompatActivity {
                     for (DeckGame deck : mCardsInUse) {
                         if (deck.getmDeckName().equals(mGame.getmSelectedDecks().get(resourceID).getmDeckID())) {
                             try {
-                                Thread.sleep(deck.getmCardResponsesID().size()*10);
+                                Thread.sleep(10+(deck.getmCardResponsesID().size()*10));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();e.printStackTrace();
                             }
