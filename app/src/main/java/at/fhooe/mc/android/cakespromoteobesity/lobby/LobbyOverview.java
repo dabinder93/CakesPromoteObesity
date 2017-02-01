@@ -109,7 +109,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                     //Refreshes the Current Players in Lobby Count whenever someone joins or leaves the Lobby
                     players.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
                     //When Host is Starting the Game
-                    if(lobby.ismGameIsStarting()){
+                    if(lobby.ismGameIsStarting() && !mUser.isHost()){
                         //Reduce UsersInLobby by 1 and push
                         lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
                         //if there are still players in Lobby, refresh Lobby, else Delete the Lobby
@@ -117,6 +117,11 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                             lobbyRef.setValue(lobby);
                         }else{
                             lobbyRef.removeValue();
+                        }
+                        try {
+                            Thread.sleep((int)(Math.random()*100));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                         Intent i = new Intent(LobbyOverview.this, GameActivity.class);
                         Bundle bundle = new Bundle();
