@@ -43,6 +43,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
     Button startGame;
     User mUser;
     Lobby lobby;
+    private boolean changingLobbies;
 
 
 
@@ -52,6 +53,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_lobby_overview);
 
         mUser = MainActivity.mUser;
+        changingLobbies = true;
 
         //Set Action Bar Title
         setTitle("Lobby");
@@ -113,7 +115,8 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                         //Reduce UsersInLobby by 1 and push
                         lobby.setmUsersInLobby(lobby.getmUsersInLobby()-1);
                         //if there are still players in Lobby, refresh Lobby, else Delete the Lobby
-                        if(lobby.getmUsersInLobby()!=0){
+                        if(lobby.getmUsersInLobby()!=0 && changingLobbies){
+                            changingLobbies = false;
                             lobbyRef.setValue(lobby);
                         }else{
                             lobbyRef.removeValue();

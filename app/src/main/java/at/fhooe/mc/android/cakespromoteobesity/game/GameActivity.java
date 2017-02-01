@@ -76,6 +76,12 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ref.child(mGameKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,7 +175,7 @@ public class GameActivity extends AppCompatActivity {
 
                 //let the listener have some time, he is so old and slow
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
