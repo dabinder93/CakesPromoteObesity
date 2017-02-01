@@ -1,9 +1,13 @@
 package at.fhooe.mc.android.cakespromoteobesity.game;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,13 +37,17 @@ public class GameActivity extends AppCompatActivity {
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Games");
     private volatile boolean allPlayersJoined;
     private List<DeckGame> mCardsInUse;
-    private String response;
+    private String response, prompt, selectedCard;
+    private TextView mPromptView, mStatusView, mCountDownView;
+    private ListView mResponseView;
+    private ArrayAdapter<String> responseAdapter;
+    private Integer countdownVal;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        //setContentView(R.layout.activity_game);
         mUser = MainActivity.mUser;
 
         Log.i("GameActivity", Thread.currentThread().getName() + " OnCreate");
@@ -96,12 +104,19 @@ public class GameActivity extends AppCompatActivity {
                     }break;
                     case 1 : {
                         //Host is filling missing Cards up
-                        if (mUser.isHost()) {
-                            fillCardsUp();
-                        }
+                        if (mUser.isHost()) fillCardsUp();
                     }break;
                     case 2 : {
                         //Round starting, Prompt gets played
+                        if (mUser.isHost()) getPrompt();
+                    }break;
+                    case 3 : {
+                        //Round starting, Prompt gets played
+                        setUpGameBoard();
+                    }break;
+                    case 4 : {
+                        //Set up CountDown for 60 seconds
+                        if (mUser.isHost()) startCountdown();
                     }break;
                 }
 
@@ -173,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 response = dataSnapshot.getValue(String.class);
-                Log.i("Fetch Data", "Response = " + response);
+                Log.i("GameActivity", "Response = " + response);
                 //Log.i("Fetch Data","Add Response to hand");
                 mGame.getmUserGameList().get(_userIndex).addCardToHand(response);
                 mGame.getmUserGameList().get(_userIndex).setmCardCount(mGame.getmUserGameList().get(_userIndex).getmCardCount() + 1);
@@ -198,5 +213,97 @@ public class GameActivity extends AppCompatActivity {
             }
         });
         Log.i("GameActivity","End of fetchResponse");
+    }
+
+    private void getPrompt() {
+
+        boolean cardIsChecked = true;
+        while (cardIsChecked) {
+            int resourceID = (int) (Math.random() * mGame.getmResourcesCount());
+            Deck resourceDeck = mGame.getmSelectedDecks().get(resourceID);
+            int cardID = (int) (Math.random() * resourceDeck.getmBlackCardCount());
+
+            for (DeckGame deck : mCardsInUse) {
+                if (deck.getmDeckName().equals(mGame.getmSelectedDecks().get(resourceID).getmDeckID())) {
+                    cardIsChecked = false;
+                    for (int i : deck.getmCardPromptsID()) {
+                        if (i == cardID) {
+                            cardIsChecked = true;
+                        }
+                    }
+                    if (!cardIsChecked) {
+                        deck.addCardToPrompts(cardID);
+                        //fetchResponse(cardID, resourceDeck.getmDeckID(), mGame.getmUserGameList().get(userIndex), userIndex);
+                        Log.i("GameActivity","Entered fetchPrompt");
+                        FirebaseDatabase.getInstance().getReference().child("Resources").child(resourceDeck.getmDeckID()).child("Prompts").child("Deck").child(String.valueOf(cardID))
+                                .child("Prompt").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                prompt = dataSnapshot.getValue(String.class);
+                                Log.i("GameActivity","Prompt = " + prompt);
+                                mGame.getmCurrentRound().setmPromptInPlay(prompt);
+                                mGame.setmGameStatus(3);
+                                ref.child(mGame.getmGameKey()).setValue(mGame);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.i("GameActivity","error on fetchPrompt occured");
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    private void setUpGameBoard() {
+        setTitle("Game");
+        Log.i("GameActivity","Entered GameBoard");
+        setContentView(R.layout.activity_game);
+        mPromptView = (TextView)findViewById(R.id.tv_game_prompt);
+        mStatusView = (TextView)findViewById(R.id.tv_game_status);
+        mCountDownView = (TextView)findViewById(R.id.tv_game_countDown);
+        mResponseView = (ListView)findViewById(R.id.listView_game_responses);
+
+        mPromptView.setText(mGame.getmCurrentRound().getmPromptInPlay());
+        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("Go enjoy a beer!");
+        else mStatusView.setText("Choose a card!");
+        mCountDownView.setText(String.valueOf(mGame.getmCurrentRound().getmCountdown()));
+        responseAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand());
+        mResponseView.setAdapter(responseAdapter);
+
+        ref.child(mGame.getmGameKey()).child("mCurrentRound").child("mCountdown").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countdownVal = dataSnapshot.getValue(Integer.class);
+                mCountDownView.setText(String.valueOf(countdownVal));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (mUser.isHost()) {
+            mGame.setmGameStatus(4);
+            ref.child(mGame.getmGameKey()).setValue(mGame);
+        }
+    }
+
+    private void startCountdown() {
+        mGame.setmGameStatus(0);
+        new CountDownTimer(61000,1000) {
+            @Override
+            public void onTick(long l) {
+                mGame.getmCurrentRound().setmCountdown(mGame.getmCurrentRound().getmCountdown()-1);
+                ref.child(mGame.getmGameKey()).setValue(mGame);
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        }.start();
     }
 }

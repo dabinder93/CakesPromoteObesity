@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:id="@+id/activity_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +9,45 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="at.fhooe.mc.android.cakespromoteobesity.game.GameActivity">
+    tools:context="at.fhooe.mc.android.cakespromoteobesity.game.GameActivity"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/tv_game_prompt"
+        android:fontFamily="sans-serif"
+        android:textSize="18sp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_game_status"
+        android:layout_alignParentBottom="true"
+        android:textSize="18sp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/tv_game_countDown" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/tv_game_countDown"
+        android:layout_alignParentBottom="true"
+        android:textSize="18sp" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_game_prompt"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/tv_game_status"
+        android:id="@+id/listView_game_responses" />
 
 </RelativeLayout>
