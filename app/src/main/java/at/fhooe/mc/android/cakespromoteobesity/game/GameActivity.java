@@ -2,6 +2,7 @@ package at.fhooe.mc.android.cakespromoteobesity.game;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.CardWithUser;
@@ -51,6 +54,9 @@ public class GameActivity extends AppCompatActivity {
     private MenuItem lockCard;
     private boolean hasSelectedCard;
     private boolean mPlayersAreChoosing;
+    private Thread playersChooseCardThread;
+    private Thread czarChoosesCardThread;
+    private ExecutorService executor;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -119,16 +125,50 @@ public class GameActivity extends AppCompatActivity {
                         if (mUser.isHost()) getPrompt();
                     }break;
                     case 3 : {
+                        if(mUser.getmUserGameID() != mGame.getmCzarID()){
+                            lockCard.setVisible(true);
+                        }else{
+                            lockCard.setVisible(false);
+                        }
+                        setContentView(R.layout.activity_game);
+                        mPromptView = (TextView)findViewById(R.id.tv_game_prompt);
+                        mStatusView = (TextView)findViewById(R.id.tv_game_status);
+                        mCountDownView = (TextView)findViewById(R.id.tv_game_countDown);
+                        mResponseView = (ListView)findViewById(R.id.listView_game_responses);
+
+                        mPromptView.setText(mGame.getmCurrentRound().getmPromptInPlay());
+                        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("You are the Card Czar");
+                        else mStatusView.setText("Card Czar is "+mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+", select a Card");
+
                         //Round starting, Prompt gets played
-                        playersChooseCard();
+                        //playersChooseCard();
+                        playersChooseCardThread = new PlayersChooseCardThread();
+                        playersChooseCardThread.start();
+                        countdownVal = 60;
+                        localCountdown();
+
                     }break;
                     case 4 : {
+                        if(mUser.getmUserGameID() == mGame.getmCzarID()){
+                            lockCard.setVisible(true);
+                            hasSelectedCard = false;
+                        }else{
+                            lockCard.setVisible(false);
+                        }
+
+                        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("Pick the best answer");
+                        else mStatusView.setText(mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+ " is picking");
+
                         //Czar chooses a Card
-                        czarChoosesCard();
-
-
+                        //czarChoosesCard();
+                        playersChooseCardThread.interrupt();
+                        czarChoosesCardThread = new CzarChoosesCardThread();
+                        czarChoosesCardThread.start();
+                        countdownVal = 60;
+                        localCountdown();
                     }break;
                     case 5 : {
+                        czarChoosesCardThread.interrupt();
                         //Disconnect all Players from the Game
                         disconnectFromGame();
 
@@ -273,81 +313,10 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void playersChooseCard() {
-        mPlayersAreChoosing= true;
-        mGame.setmGameStatus(0);
-        if(mUser.getmUserGameID() != mGame.getmCzarID()){
-            lockCard.setVisible(true);
-        }else{
-            lockCard.setVisible(false);
-        }
+//  private void playersChooseCard() {}
 
-        setTitle("Game");
-        Log.i("GameActivity","Player choosing Cards");
-        setContentView(R.layout.activity_game);
-        mPromptView = (TextView)findViewById(R.id.tv_game_prompt);
-        mStatusView = (TextView)findViewById(R.id.tv_game_status);
-        mCountDownView = (TextView)findViewById(R.id.tv_game_countDown);
-        mResponseView = (ListView)findViewById(R.id.listView_game_responses);
 
-        if(mUser.getmUserGameID() == mGame.getmCzarID()){
-            hasSelectedCard = true;
-        }else{
-            hasSelectedCard = false;
-        }
-
-        mPromptView.setText(mGame.getmCurrentRound().getmPromptInPlay());
-        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("You are the Card Czar");
-        else mStatusView.setText("Card Czar is "+mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+", select a Card");
-        //mCountDownView.setText(String.valueOf(mGame.getmCurrentRound().getmCountdown()));
-
-        countdownVal = 60;
-        mCountDownView.setText(String.valueOf(countdownVal));
-        localCountdown();
-
-        responseAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand());
-        mResponseView.setAdapter(responseAdapter);
-        mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(!hasSelectedCard){
-                    selectedCard = mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand().get(position);
-                }
-                Log.i("GameActivity", "selected Card  = " +selectedCard);
-            }
-        });
-    }
-
-    private void czarChoosesCard() {
-        mPlayersAreChoosing= false;
-        mGame.setmGameStatus(0);
-        if(mUser.getmUserGameID() == mGame.getmCzarID()){
-            lockCard.setVisible(true);
-            hasSelectedCard = false;
-        }else{
-            lockCard.setVisible(false);
-        }
-
-        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("Pick the best answer");
-        else mStatusView.setText(mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+ " is picking");
-
-        countdownVal = 60;
-        mCountDownView.setText(String.valueOf(countdownVal));
-        localCountdown();
-
-        //check if
-        promptAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mGame.getmCurrentRound().getmCardWithUserList());
-        mResponseView.setAdapter(promptAdapter);
-        mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(!hasSelectedCard){
-                    selectedCard = mGame.getmCurrentRound().getmCardWithUserList().get(position).getmCardText();
-                }
-                Log.i("GameActivity", "selected Card  = " + selectedCard);
-            }
-        });
-    }
+    //private void czarChoosesCard() {}
 
     private void localCountdown(){
         new CountDownTimer(61000, 1000){
@@ -479,5 +448,84 @@ public class GameActivity extends AppCompatActivity {
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class PlayersChooseCardThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            Looper.prepare();
+            mPlayersAreChoosing= true;
+            mGame.setmGameStatus(0);
+            /*if(mUser.getmUserGameID() != mGame.getmCzarID()){
+                lockCard.setVisible(true);
+            }else{
+                lockCard.setVisible(false);
+            }
+*/
+//            setTitle("Game");
+            Log.i("GameActivity","Player choosing Cards");
+
+
+            if(mUser.getmUserGameID() == mGame.getmCzarID()){
+                hasSelectedCard = true;
+            }else{
+                hasSelectedCard = false;
+            }
+
+
+            //mCountDownView.setText(String.valueOf(mGame.getmCurrentRound().getmCountdown()));
+
+            //countdownVal = 60;
+            mCountDownView.setText(String.valueOf(countdownVal));
+            //localCountdown();
+
+            responseAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand());
+            mResponseView.setAdapter(responseAdapter);
+            mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(!hasSelectedCard){
+                        selectedCard = mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand().get(position);
+                    }
+                    Log.i("GameActivity", "selected Card  = " +selectedCard);
+                }
+            });
+        }
+    }
+
+    class CzarChoosesCardThread extends Thread{
+        @Override
+        public void run() {
+            Looper.prepare();
+            super.run();
+            mPlayersAreChoosing= false;
+            mGame.setmGameStatus(0);
+            /*if(mUser.getmUserGameID() == mGame.getmCzarID()){
+                lockCard.setVisible(true);
+                hasSelectedCard = false;
+            }else{
+                lockCard.setVisible(false);
+            }*/
+
+
+
+            //countdownVal = 60;
+            //mCountDownView.setText(String.valueOf(countdownVal));
+            //localCountdown();
+
+            //check if
+            promptAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmCurrentRound().getmCardWithUserList());
+            mResponseView.setAdapter(promptAdapter);
+            mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(!hasSelectedCard){
+                        selectedCard = mGame.getmCurrentRound().getmCardWithUserList().get(position).getmCardText();
+                    }
+                    Log.i("GameActivity", "selected Card  = " + selectedCard);
+                }
+            });
+        }
     }
 }
