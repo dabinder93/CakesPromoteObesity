@@ -122,7 +122,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
                             lobbyRef.removeValue();
                         }
                         try {
-                            Thread.sleep((int)(Math.random()*100));
+                            Thread.sleep(mUser.getmUserGameID()*200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

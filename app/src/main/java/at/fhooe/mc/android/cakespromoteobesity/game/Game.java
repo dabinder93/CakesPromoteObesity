@@ -49,8 +49,8 @@ public class Game implements Serializable{
         mUsersInGame = 0;
         //mRunGame = false;
         mGameStatus = 0;
-        //mCzarID = (int) (Math.random()*mUsersInLobby);
-        mCzarID = 0;
+        mCzarID = (int) (Math.random()*mUsersInLobby);
+        //mCzarID = 0;
         mTimerForCzar = 60;
         mTimerForPlayer = 60;
 
@@ -181,4 +181,5 @@ public class Game implements Serializable{
     public int getmGameStatus() {
         return mGameStatus;
     }
+
 }

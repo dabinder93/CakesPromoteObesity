@@ -72,4 +72,5 @@ public class CurrentRound implements Serializable {
     public void setmSelectedCard(CardWithUser mSelectedCard) {
         this.mSelectedCard = mSelectedCard;
     }*/
+
 }

@@ -10,7 +10,7 @@ public class CardWithUser {
 
     CardWithUser(){}
 
-    CardWithUser(int _mUserGameID, String _mCardText){
+    public CardWithUser(int _mUserGameID, String _mCardText){
         mUserGameID = _mUserGameID;
         mCardText = _mCardText;
     }
@@ -30,7 +30,8 @@ public class CardWithUser {
         this.mCardText = mCardText;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return mCardText;
+    }
 }

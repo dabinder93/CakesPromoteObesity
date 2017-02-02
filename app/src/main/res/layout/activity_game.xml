@@ -48,6 +48,8 @@
         android:layout_below="@+id/tv_game_prompt"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/tv_game_status"
-        android:id="@+id/listView_game_responses" />
+        android:id="@+id/listView_game_responses"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/darker_gray"/>
 
 </RelativeLayout>

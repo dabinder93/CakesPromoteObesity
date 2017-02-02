@@ -2,6 +2,7 @@ package at.fhooe.mc.android.cakespromoteobesity.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,6 +30,17 @@ public class UserGame implements Serializable {
     public void addCardToHand(String cardText) {
         if (mCardsInHand == null) mCardsInHand = new ArrayList<>();
             mCardsInHand.add(cardText);
+    }
+
+    public void removeCardFromHand(String _cardText){
+        Iterator<String> iterator = mCardsInHand.iterator();
+        while(iterator.hasNext()){
+            String s = iterator.next();
+            if(s.equals(_cardText)){
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public String getmName() {
