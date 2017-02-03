@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +52,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Integer countdownValPlayer, countDownValCzar;
     private MenuItem lockCard;
     private boolean hasSelectedCard, mPlayersAreChoosing;
+    private ProgressBar loadingBar;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_game_setup);
+        loadingBar = (ProgressBar)findViewById(R.id.progressBar_game_setup);
+        loadingBar.setVisibility(View.VISIBLE);
+
         setTitle("Setting up game");
         mUser = MainActivity.mUser;
 
