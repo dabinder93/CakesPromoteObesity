@@ -35,6 +35,7 @@ public class JoinLobby extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_join);
+        setTitle("Join a Lobby");
 
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView_lobby_list);
         //mRecyclerView.setHasFixedSize(true);

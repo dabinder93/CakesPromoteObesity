@@ -1,8 +1,6 @@
 package at.fhooe.mc.android.cakespromoteobesity.game;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.CardWithUser;
@@ -38,37 +36,33 @@ import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
  * This is the class which has the logic of the game and does push- and retrieves from the Firebase DB
  * Has a ValueEventListener which will retrieve the Game-Object from the DB when someone makes changes to it
  */
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private Game mGame;
     private User mUser;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Games");
-    private volatile boolean allPlayersJoined;
     private List<DeckGame> mCardsInUse;
     private String response, prompt, selectedCard;
     private TextView mPromptView, mStatusView, mCountDownView;
     private ListView mResponseView;
     private ArrayAdapter<String> responseAdapter;
     private ArrayAdapter<CardWithUser> promptAdapter;
-    private Integer countdownVal;
+    private Integer countdownValPlayer, countDownValCzar;
     private MenuItem lockCard;
-    private boolean hasSelectedCard;
-    private boolean mPlayersAreChoosing;
-    private Thread playersChooseCardThread;
-    private Thread czarChoosesCardThread;
-    private ExecutorService executor;
+    private boolean hasSelectedCard, mPlayersAreChoosing;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_game);
+        setTitle("Setting up game");
         mUser = MainActivity.mUser;
 
         Log.i("GameActivity", Thread.currentThread().getName() + " OnCreate");
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         mCardsInUse = new ArrayList<DeckGame>();
-        allPlayersJoined = false;
         //Get game passed from Intent
         final String mGameKey = (String) bundle.getSerializable("GameKey");
 
@@ -84,6 +78,7 @@ public class GameActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGame = dataSnapshot.getValue(Game.class);
                 mGame.setmUsersInGame(mGame.getmUsersInGame() + 1);
+                setTitle(mGame.getmName() + " Game");
 
                 //Get GameStatus to 1 if all Players joined
                 if (mGame.getmUsersInGame() == mGame.getmUsersInLobby()) mGame.setmGameStatus(1);
@@ -125,53 +120,22 @@ public class GameActivity extends AppCompatActivity {
                         if (mUser.isHost()) getPrompt();
                     }break;
                     case 3 : {
-                        if(mUser.getmUserGameID() != mGame.getmCzarID()){
-                            lockCard.setVisible(true);
-                        }else{
-                            lockCard.setVisible(false);
-                        }
-                        setContentView(R.layout.activity_game);
-                        mPromptView = (TextView)findViewById(R.id.tv_game_prompt);
-                        mStatusView = (TextView)findViewById(R.id.tv_game_status);
-                        mCountDownView = (TextView)findViewById(R.id.tv_game_countDown);
-                        mResponseView = (ListView)findViewById(R.id.listView_game_responses);
-
-                        mPromptView.setText(mGame.getmCurrentRound().getmPromptInPlay());
-                        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("You are the Card Czar");
-                        else mStatusView.setText("Card Czar is "+mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+", select a Card");
-
                         //Round starting, Prompt gets played
-                        //playersChooseCard();
-                        playersChooseCardThread = new PlayersChooseCardThread();
-                        playersChooseCardThread.start();
-                        countdownVal = 60;
-                        localCountdown();
-
+                        playersChooseCard();
                     }break;
                     case 4 : {
-                        if(mUser.getmUserGameID() == mGame.getmCzarID()){
-                            lockCard.setVisible(true);
-                            hasSelectedCard = false;
-                        }else{
-                            lockCard.setVisible(false);
-                        }
-
-                        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("Pick the best answer");
-                        else mStatusView.setText(mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+ " is picking");
-
                         //Czar chooses a Card
-                        //czarChoosesCard();
-                        playersChooseCardThread.interrupt();
-                        czarChoosesCardThread = new CzarChoosesCardThread();
-                        czarChoosesCardThread.start();
-                        countdownVal = 60;
-                        localCountdown();
+                        countdownValPlayer = 1;
+                        czarChoosesCard();
                     }break;
                     case 5 : {
-                        czarChoosesCardThread.interrupt();
+                        //Check the points from the round
+                        countDownValCzar = 1;
+                        checkPointsForRound();
+                    }break;
+                    case 6 : {
                         //Disconnect all Players from the Game
                         disconnectFromGame();
-
                     }break;
                 }
 
@@ -249,7 +213,15 @@ public class GameActivity extends AppCompatActivity {
                 mGame.getmUserGameList().get(_userIndex).setmCardCount(mGame.getmUserGameList().get(_userIndex).getmCardCount() + 1);
 
                 //Check if all cards are filled up, start the Round = 2
-                if (_userIndex ==  mGame.getmUserGameList().size()-1 && mGame.getmUserGameList().get(_userIndex).getmCardCount() == 10) mGame.setmGameStatus(2);
+                //if (_userIndex ==  mGame.getmUserGameList().size()-1 && mGame.getmUserGameList().get(_userIndex).getmCardCount() == 10) mGame.setmGameStatus(2);
+                boolean filledUp = true;
+                for (UserGame user : mGame.getmUserGameList()) {
+                    if (user.getmCardCount() != 10) {
+                        filledUp = false;
+                        break;
+                    }
+                }
+                if (filledUp) mGame.setmGameStatus(2);
 
                 //let the listener have some time, he is so old and slow
                 try {
@@ -313,49 +285,137 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-//  private void playersChooseCard() {}
+    private void playersChooseCard() {
+        setTitle("Players choosing cards");
+
+        setContentView(R.layout.activity_game);
+        mPromptView = (TextView)findViewById(R.id.tv_game_prompt);
+        mStatusView = (TextView)findViewById(R.id.tv_game_status);
+        mCountDownView = (TextView)findViewById(R.id.tv_game_countDown);
+        mResponseView = (ListView)findViewById(R.id.listView_game_responses);
+
+        mPromptView.setText(mGame.getmCurrentRound().getmPromptInPlay());
+        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("You are the Card Czar");
+        else mStatusView.setText("Card Czar is "+mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+", select a Card");
+
+        mPlayersAreChoosing= true;
+        mGame.setmGameStatus(0);
+        if(mUser.getmUserGameID() != mGame.getmCzarID()){
+            lockCard.setVisible(true);
+        }else{
+            lockCard.setVisible(false);
+        }
 
 
-    //private void czarChoosesCard() {}
+        Log.i("GameActivity","Player choosing Cards");
 
-    private void localCountdown(){
-        new CountDownTimer(61000, 1000){
+
+        if(mUser.getmUserGameID() == mGame.getmCzarID()){
+            hasSelectedCard = true;
+        }else{
+            hasSelectedCard = false;
+        }
+
+        countdownValPlayer = 61;
+        mCountDownView.setText(String.valueOf(countdownValPlayer));
+
+        TimerTask task = new TimerTask(){
             @Override
-            public void onTick(long millisUntilFinished) {
-                countdownVal--;
-                mCountDownView.setText(String.valueOf(countdownVal));
+            public void run() {
+                countdownValPlayer--;
+                //mCountDownView.setText(String.valueOf(countdownValPlayer));
+                displayTimerText(String.valueOf(countdownValPlayer));
+                if (countdownValPlayer > 0) displayTimerText(String.valueOf(countdownValPlayer));
+                else this.cancel();
             }
-            @Override
-            public void onFinish() {
-                if(!hasSelectedCard){
-                    lockCard.setVisible(false);
-                    Toast.makeText(GameActivity.this, "You are a strong independent person who don't need no card to choose!",Toast.LENGTH_LONG).show();
-                }
-                if(mGame.getmCurrentRound().getmPickCount() != mGame.getmUsersInGame()-1 && (mUser.getmUserGameID() == mGame.getmCzarID())){
-                    mGame.setmGameStatus(4);
-                    ref.child(mGame.getmGameKey()).setValue(mGame);
-                }
-                return;
-            }
-        }.start();
+        };
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(task,0,1000);
+
+        responseAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand());
+        mResponseView.setAdapter(responseAdapter);
+        mResponseView.setOnItemClickListener(this);
     }
 
-    /*private void startCountdown() {
+
+    private void czarChoosesCard() {
+        if(mUser.getmUserGameID() == mGame.getmCzarID()){
+            lockCard.setVisible(true);
+            hasSelectedCard = false;
+        }else{
+            lockCard.setVisible(false);
+        }
+
+        if (mGame.getmCzarID() == mUser.getmUserGameID()) mStatusView.setText("Pick the best answer");
+        else mStatusView.setText(mGame.getmUserGameList().get(mGame.getmCzarID()).getmName()+ " is picking");
+
+        mPlayersAreChoosing= false;
         mGame.setmGameStatus(0);
-        mGame.getmCurrentRound().setmCountdown(60);
-        new CountDownTimer(61000,1000) {
+
+        countDownValCzar = 61;
+        mCountDownView.setText(String.valueOf(countDownValCzar));
+
+        TimerTask task = new TimerTask(){
             @Override
-            public void onTick(long l) {
-                mGame.getmCurrentRound().setmCountdown(mGame.getmCurrentRound().getmCountdown()-1);
+            public void run() {
+                countDownValCzar--;
+                //mCountDownView.setText(String.valueOf(countDownValCzar));
+                if (countDownValCzar > 0) displayTimerText(String.valueOf(countDownValCzar));
+                else this.cancel();
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(task,0,1000);
+
+        //check if
+        promptAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmCurrentRound().getmCardWithUserList());
+        mResponseView.setAdapter(promptAdapter);
+        mResponseView.setOnItemClickListener(this);
+    }
+
+    private void checkPointsForRound() {
+        int userID = 0;
+        for (CardWithUser cwu : mGame.getmCurrentRound().getmCardWithUserList()) {
+            if (cwu.getmCardText().equals(selectedCard)) {
+                userID = cwu.getmUserGameID();
+                break;
+            }
+        }
+        mStatusView.setText("The point goes to " + mGame.getmUserGameList().get(userID).getmName());
+        mGame.getmUserGameList().get(userID).setmPoints(mGame.getmUserGameList().get(userID).getmPoints() + 1);
+
+        //Check if someone got all Points
+        if(mGame.getmUserGameList().get(userID).getmPoints() == mGame.getmWinpoints()){
+            mStatusView.setText("The Winner is " + mGame.getmUserGameList().get(userID).getmName());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (mUser.getmUserGameID() == mGame.getmCzarID()) {
+                mGame.setmGameStatus(6);
                 ref.child(mGame.getmGameKey()).setValue(mGame);
             }
 
-            @Override
-            public void onFinish() {
+        }else{
+            try {
+                Log.i("GameActivity","Thread is now sleeping");
+                Thread.sleep(3000);
+                Log.i("GameActivity","Thread sleeping now over");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }.start();
-    }*/
-
+            if (mUser.getmUserGameID() == mGame.getmCzarID()) {
+                mGame.getmCurrentRound().setmPickCount(0);
+                mGame.getmCurrentRound().setmCardWithUserList(new ArrayList<CardWithUser>());
+                mGame.setmCzarID((mGame.getmCzarID()+1)%mGame.getmUsersInGame());
+                mGame.setmGameStatus(1);
+                ref.child(mGame.getmGameKey()).setValue(mGame);
+            }
+        }
+    }
 
     private void disconnectFromGame() {
         try {
@@ -366,9 +426,14 @@ public class GameActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         mGame.setmUsersInGame(mGame.getmUsersInGame()-1);
-        if(mGame.getmUsersInGame() == 0){
+        if(mGame.getmUsersInGame() == 0) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ref.child(mGame.getmGameKey()).removeValue();
-        }
+        }else ref.child(mGame.getmGameKey()).setValue(mGame);
         startActivity(i);
     }
 
@@ -385,147 +450,70 @@ public class GameActivity extends AppCompatActivity {
     //Confirm selected answer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.lockCard:
                 //Toast.makeText(GameActivity.this, "clicked "+item, Toast.LENGTH_SHORT).show();
-                if(mPlayersAreChoosing){
-
-                    if(mGame.getmCurrentRound().getmCardWithUserList()==null){
+                if (mPlayersAreChoosing) {
+                    //Player chooses a card
+                    lockCard.setVisible(false);
+                    if (mGame.getmCurrentRound().getmCardWithUserList() == null) {
                         List<CardWithUser> cardWithUsers = new ArrayList<>();
                         cardWithUsers.add(new CardWithUser(mUser.getmUserGameID(), selectedCard));
                         mGame.getmCurrentRound().setmCardWithUserList(cardWithUsers);
-                    }else{
+                    } else {
                         mGame.getmCurrentRound().addCardToCardWithUserList(new CardWithUser(mUser.getmUserGameID(), selectedCard));
                     }
-                    mGame.getmCurrentRound().setmPickCount(mGame.getmCurrentRound().getmPickCount()+1);
-                    if(mGame.getmCurrentRound().getmPickCount() == mGame.getmUsersInGame()-1){
+                    mGame.getmCurrentRound().setmPickCount(mGame.getmCurrentRound().getmPickCount() + 1);
+                    if (mGame.getmCurrentRound().getmPickCount() == mGame.getmUsersInGame() - 1) {
                         mGame.setmGameStatus(4);
+                        //countdownValPlayer = 1;
                     }
 
                     //Remove selected Card from Hand
                     mGame.getmUserGameList().get(mUser.getmUserGameID()).removeCardFromHand(selectedCard);
-                    mGame.getmUserGameList().get(mUser.getmUserGameID()).setmCardCount(mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardCount()-1);
+                    mGame.getmUserGameList().get(mUser.getmUserGameID()).setmCardCount(mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardCount() - 1);
 
-                    lockCard.setVisible(false);
                     hasSelectedCard = true;
-                    mStatusView.setText("You picked: "+selectedCard);
+                    mStatusView.setText("You picked: " + selectedCard);
                     ref.child(mGame.getmGameKey()).setValue(mGame);
-                }else{
+                } else {
+                    //Czar chooses a card
                     lockCard.setVisible(false);
-                    int userID = 0;
-                    for(CardWithUser cwu : mGame.getmCurrentRound().getmCardWithUserList()){
-                        if(cwu.getmCardText().equals(selectedCard)){
-                            userID = cwu.getmUserGameID();
-                            break;
-                        }
-                    }
-                    mStatusView.setText("The point goes to "+mGame.getmUserGameList().get(userID).getmName());
-                    mGame.getmUserGameList().get(userID).setmPoints(mGame.getmUserGameList().get(userID).getmPoints()+1);
-
-                    //Check if someone got all Points
-                    if(mGame.getmUserGameList().get(userID).getmPoints() == mGame.getmWinpoints()){
-                        mGame.setmGameStatus(5);
-                        mStatusView.setText("The Winner is " + mGame.getmUserGameList().get(userID).getmName());
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-
-                        }
-                        ref.child(mGame.getmGameKey()).setValue(mGame);
-
-                    }else{
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-
-                        }
-                        mGame.getmCurrentRound().setmCardWithUserList(new ArrayList<CardWithUser>());
-                        mGame.setmCzarID((mGame.getmCzarID()+1)%mGame.getmUsersInGame());
-                        mGame.setmGameStatus(1);
-                        ref.child(mGame.getmGameKey()).setValue(mGame);
-                    }
+                    //countDownValCzar = 1;
+                    mGame.setmGameStatus(5);
+                    ref.child(mGame.getmGameKey()).setValue(mGame);
                 }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private class PlayersChooseCardThread extends Thread {
-        @Override
-        public void run() {
-            super.run();
-            Looper.prepare();
-            mPlayersAreChoosing= true;
-            mGame.setmGameStatus(0);
-            /*if(mUser.getmUserGameID() != mGame.getmCzarID()){
-                lockCard.setVisible(true);
-            }else{
-                lockCard.setVisible(false);
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    //On ListViewItemClick
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        if (mPlayersAreChoosing) {
+            if(!hasSelectedCard){
+                selectedCard = mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand().get(position);
             }
-*/
-//            setTitle("Game");
-            Log.i("GameActivity","Player choosing Cards");
-
-
-            if(mUser.getmUserGameID() == mGame.getmCzarID()){
-                hasSelectedCard = true;
-            }else{
-                hasSelectedCard = false;
+            Log.i("GameActivity", "selected Card  = " + selectedCard);
+        }else {
+            if(!hasSelectedCard){
+                selectedCard = mGame.getmCurrentRound().getmCardWithUserList().get(position).getmCardText();
             }
-
-
-            //mCountDownView.setText(String.valueOf(mGame.getmCurrentRound().getmCountdown()));
-
-            //countdownVal = 60;
-            mCountDownView.setText(String.valueOf(countdownVal));
-            //localCountdown();
-
-            responseAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand());
-            mResponseView.setAdapter(responseAdapter);
-            mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(!hasSelectedCard){
-                        selectedCard = mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand().get(position);
-                    }
-                    Log.i("GameActivity", "selected Card  = " +selectedCard);
-                }
-            });
+            Log.i("GameActivity", "selected Card  = " + selectedCard);
         }
     }
 
-    class CzarChoosesCardThread extends Thread{
-        @Override
-        public void run() {
-            Looper.prepare();
-            super.run();
-            mPlayersAreChoosing= false;
-            mGame.setmGameStatus(0);
-            /*if(mUser.getmUserGameID() == mGame.getmCzarID()){
-                lockCard.setVisible(true);
-                hasSelectedCard = false;
-            }else{
-                lockCard.setVisible(false);
-            }*/
-
-
-
-            //countdownVal = 60;
-            //mCountDownView.setText(String.valueOf(countdownVal));
-            //localCountdown();
-
-            //check if
-            promptAdapter = new ArrayAdapter<>(GameActivity.this,android.R.layout.simple_list_item_1,mGame.getmCurrentRound().getmCardWithUserList());
-            mResponseView.setAdapter(promptAdapter);
-            mResponseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(!hasSelectedCard){
-                        selectedCard = mGame.getmCurrentRound().getmCardWithUserList().get(position).getmCardText();
-                    }
-                    Log.i("GameActivity", "selected Card  = " + selectedCard);
-                }
-            });
-        }
+    private void displayTimerText(final String _text) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mCountDownView.setText(_text);
+            }
+        });
     }
 }

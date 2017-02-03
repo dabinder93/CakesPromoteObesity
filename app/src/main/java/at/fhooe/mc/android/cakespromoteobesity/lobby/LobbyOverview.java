@@ -56,7 +56,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         changingLobbies = true;
 
         //Set Action Bar Title
-        setTitle("Lobby");
+        setTitle(lobby.getmName() + " Lobby");
         hostName = (TextView) findViewById(R.id.tv_lobbyOv_hostName);
         lobbyName = (TextView) findViewById(R.id.tv_lobbyOv_lobbyName);
         players = (TextView) findViewById(R.id.tv_lobbyOv_players);

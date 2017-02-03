@@ -40,8 +40,6 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     final DatabaseReference decksRef = MainActivity.mainRef.child("Decks"); // = FirebaseDatabase.getInstance().getReference().child("Decks");
 
 
-
-    public static final String TAG = "CreateLobby Test";
     EditText lobbyName;
     EditText lobbyPassword;
     Spinner dropdown_players;
@@ -64,6 +62,7 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_create);
+        setTitle("Create a Lobby");
 
         lobbyName = (EditText) findViewById(R.id.et_name);
         lobbyPassword = (EditText) findViewById(R.id.et_password);
