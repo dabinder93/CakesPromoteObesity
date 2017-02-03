@@ -83,5 +83,8 @@ public class UserGame implements Serializable {
         this.mSelectedCard = mSelectedCard;
     }
 
-
+    @Override
+    public String toString() {
+        return mName + "\n \t" + mPoints;
+    }
 }

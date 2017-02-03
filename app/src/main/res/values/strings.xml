@@ -16,4 +16,6 @@
     <string name="title_activity_lobby_overview">LobbyOverview</string>
     <string name="tv_txt_Host">Host:</string>
     <string name="btn_txt_startGame">Start the Game!</string>
+    <string name="txt_scoreboard">Scoreboard</string>
+    <string name="btn_txt_scoreboard_return">Return to menu</string>
 </resources>

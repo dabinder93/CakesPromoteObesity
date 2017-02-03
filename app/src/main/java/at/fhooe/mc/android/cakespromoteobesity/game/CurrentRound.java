@@ -14,7 +14,6 @@ import at.fhooe.mc.android.cakespromoteobesity.card.CardWithUser;
 public class CurrentRound implements Serializable {
 
     private List<CardWithUser> mCardWithUserList;
-    private int mCountdown;
     private int mPickCount;
     private String mPromptInPlay;
     //private CardWithUser mSelectedCard;
@@ -22,10 +21,9 @@ public class CurrentRound implements Serializable {
     public CurrentRound(){}
 
 
-    public CurrentRound(int _countdown){
-        mCountdown = _countdown;
+    public CurrentRound(int _pickcount){
         mCardWithUserList = new ArrayList<CardWithUser>();
-        mPickCount = 0;
+        mPickCount = _pickcount;
         mPromptInPlay = "";
     }
 
@@ -39,14 +37,6 @@ public class CurrentRound implements Serializable {
 
     public void setmCardWithUserList(List<CardWithUser> mCardWithUserList) {
         this.mCardWithUserList = mCardWithUserList;
-    }
-
-    public int getmCountdown() {
-        return mCountdown;
-    }
-
-    public void setmCountdown(int mCountdown) {
-        this.mCountdown = mCountdown;
     }
 
     public int getmPickCount() {

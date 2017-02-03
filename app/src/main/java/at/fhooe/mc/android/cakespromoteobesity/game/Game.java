@@ -24,20 +24,14 @@ public class Game implements Serializable{
     private List<Deck> mSelectedDecks;
     private int mUsersInLobby;
     private int mUsersInGame;
-    //private boolean mRunGame;
     private int mGameStatus;
     private int mCzarID;
     private int mTimerForCzar;
     private int mTimerForPlayer;
     private CurrentRound mCurrentRound;
     private List<UserGame> mUserGameList;
-    private List<DeckGame> mCardsInUse;
 
     public Game(){}
-
-    public void setmGameStatus(int mGameStatus) {
-        this.mGameStatus = mGameStatus;
-    }
 
     public Game(Lobby _lobby) {
         mName = _lobby.getmName();
@@ -51,19 +45,19 @@ public class Game implements Serializable{
         mGameStatus = 0;
         mCzarID = (int) (Math.random()*mUsersInLobby);
         //mCzarID = 0;
-        mTimerForCzar = 60;
-        mTimerForPlayer = 60;
+        //mTimerForCzar = 60;
+        //mTimerForPlayer = 60;
 
         mUserGameList = new ArrayList<>();
         for (String user:_lobby.getmUserList()){
             mUserGameList.add(new UserGame(user));
         }
-        mCurrentRound = new CurrentRound(60);
+        mCurrentRound = new CurrentRound(0);
 
-        mCardsInUse = new ArrayList<>();
+        /*mCardsInUse = new ArrayList<>();
         for (Deck deck : _lobby.getmDecks()) {
             mCardsInUse.add(new DeckGame(deck.getmDeckName()));
-        }
+        }*/
     }
 
     public String getmName() {
@@ -138,22 +132,6 @@ public class Game implements Serializable{
         this.mCzarID = mCzarID;
     }
 
-    public int getmTimerForCzar() {
-        return mTimerForCzar;
-    }
-
-    public void setmTimerForCzar(int mTimerForCzar) {
-        this.mTimerForCzar = mTimerForCzar;
-    }
-
-    public int getmTimerForPlayer() {
-        return mTimerForPlayer;
-    }
-
-    public void setmTimerForPlayer(int mTimerForPlayer) {
-        this.mTimerForPlayer = mTimerForPlayer;
-    }
-
     public CurrentRound getmCurrentRound() {
         return mCurrentRound;
     }
@@ -170,12 +148,8 @@ public class Game implements Serializable{
         this.mUserGameList = mUserGameList;
     }
 
-    public List<DeckGame> getmCardsInUse() {
-        return mCardsInUse;
-    }
-
-    public void setmCardsInUse(List<DeckGame> mCardsInUse) {
-        this.mCardsInUse = mCardsInUse;
+    public void setmGameStatus(int mGameStatus) {
+        this.mGameStatus = mGameStatus;
     }
 
     public int getmGameStatus() {

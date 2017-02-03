@@ -56,7 +56,6 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         changingLobbies = true;
 
         //Set Action Bar Title
-        setTitle(lobby.getmName() + " Lobby");
         hostName = (TextView) findViewById(R.id.tv_lobbyOv_hostName);
         lobbyName = (TextView) findViewById(R.id.tv_lobbyOv_lobbyName);
         players = (TextView) findViewById(R.id.tv_lobbyOv_players);
@@ -75,6 +74,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
         //Get lobby passed from Intent
         lobby = (Lobby)bundle.getSerializable("LobbyObject");
         Log.i("LobbyOverview", lobby.getmName());
+        setTitle(lobby.getmName() + " Lobby");
 
         //Extract data and show them in TextViews
         mLobbyKey = lobby.getmLobbyKey();
