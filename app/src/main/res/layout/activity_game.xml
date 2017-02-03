@@ -14,17 +14,6 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/tv_game_prompt"
-        android:fontFamily="sans-serif"
-        android:textSize="18sp"
-        android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:textStyle="normal|bold" />
-
-    <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_game_status"
@@ -43,13 +32,36 @@
         android:textSize="18sp" />
 
     <ListView
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tv_game_prompt"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/tv_game_status"
         android:id="@+id/listView_game_responses"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"/>
+        android:listSelector="@android:color/darker_gray"
+        android:layout_width="100dp"
+        android:layout_above="@+id/tv_game_status"
+        android:layout_below="@+id/tv_game_prompt"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/listView_game_score" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/tv_game_prompt"
+        android:fontFamily="sans-serif"
+        android:textSize="18sp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        android:textStyle="normal|bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_height="match_parent"
+        android:id="@+id/listView_game_score"
+        android:layout_marginLeft="5dp"
+        android:layout_width="120dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tv_game_prompt"
+        android:layout_above="@+id/tv_game_status" />
 
 </RelativeLayout>
