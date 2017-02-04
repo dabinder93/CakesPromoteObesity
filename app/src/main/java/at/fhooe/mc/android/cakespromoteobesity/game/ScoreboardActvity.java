@@ -17,6 +17,9 @@ import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
 
+/**
+ * Displays the Scores of the users in a game when the Game is over
+ */
 public class ScoreboardActvity extends AppCompatActivity {
     private List<UserGame> mUserGameList;
     ListView mScoreboard;
@@ -55,7 +58,5 @@ public class ScoreboardActvity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 }

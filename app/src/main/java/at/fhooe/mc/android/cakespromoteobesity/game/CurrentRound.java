@@ -18,8 +18,8 @@ public class CurrentRound implements Serializable {
     private String mPromptInPlay;
     //private CardWithUser mSelectedCard;
 
+    //Firebase
     public CurrentRound(){}
-
 
     public CurrentRound(int _pickcount){
         mCardWithUserList = new ArrayList<CardWithUser>();
@@ -27,40 +27,59 @@ public class CurrentRound implements Serializable {
         mPromptInPlay = "";
     }
 
+    /**
+     * Adds a card to the CardWithUser List
+     * @param _cwu CardWithUser object to the list
+     */
     public void addCardToCardWithUserList(CardWithUser _cwu){
         mCardWithUserList.add(_cwu);
     }
 
+    /**
+     * Gets the CardWithUser list
+     * @return List<CardWithUser> list with all cardWithUser
+     */
     public List<CardWithUser> getmCardWithUserList() {
         return mCardWithUserList;
     }
 
+    /**
+     * Sets a new List to CardWithUserList
+     * @param mCardWithUserList new List<CardWithUser> list
+     */
     public void setmCardWithUserList(List<CardWithUser> mCardWithUserList) {
         this.mCardWithUserList = mCardWithUserList;
     }
 
+    /**
+     * returns the amount of cards which have been choosen as a response from the users
+     * @return int of pickCount
+     */
     public int getmPickCount() {
         return mPickCount;
     }
 
+    /**
+     * sets a new value for the pickCount
+     * @param mPickCount int of new pickCount
+     */
     public void setmPickCount(int mPickCount) {
         this.mPickCount = mPickCount;
     }
 
+    /**
+     * return the String of the Prompt which is currently Displayed to the users
+     * @return String of promptInPlay
+     */
     public String getmPromptInPlay() {
         return mPromptInPlay;
     }
 
+    /**
+     * set a new Card as the prompt in Play
+     * @param mPromptInPlay String of new card which should be displayed to the users
+     */
     public void setmPromptInPlay(String mPromptInPlay) {
         this.mPromptInPlay = mPromptInPlay;
     }
-
-    /*public CardWithUser getmSelectedCard() {
-        return mSelectedCard;
-    }
-
-    public void setmSelectedCard(CardWithUser mSelectedCard) {
-        this.mSelectedCard = mSelectedCard;
-    }*/
-
 }

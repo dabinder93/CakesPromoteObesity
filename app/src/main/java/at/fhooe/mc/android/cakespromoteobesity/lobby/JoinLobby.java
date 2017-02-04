@@ -27,7 +27,6 @@ public class JoinLobby extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LobbyListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    //private boolean mLobbiesAreExisting;
     private List<Lobby> mLobbyList;
     private DatabaseReference ref;
 
@@ -47,6 +46,9 @@ public class JoinLobby extends AppCompatActivity {
 
     }
 
+    /**
+     * Listener which fetches the lobby object from database and updates the LobbyListView
+     */
     private void setUpLobbyList() {
         //Set up the List of Lobbies
         mLobbyList = new ArrayList<>();
@@ -58,13 +60,10 @@ public class JoinLobby extends AppCompatActivity {
                 }else {
                     mLobbyList = new ArrayList<Lobby>();
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                        //String key = snap.getKey();
-                        //Lobby lobby = snap.child(key).getValue(Lobby.class);
                         Lobby lobby = snap.getValue(Lobby.class);
                         mLobbyList.add(lobby);
                     }
                 }
-                //Toast.makeText(JoinLobby.this,"There are a total of " + mLobbyList.size() + " Lobbies up",Toast.LENGTH_SHORT).show();
                 mAdapter = new LobbyListAdapter(JoinLobby.this,mLobbyList);
                 mRecyclerView.setAdapter(mAdapter);
             }

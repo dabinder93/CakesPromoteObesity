@@ -33,12 +33,8 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
  */
 public class CreateLobby extends AppCompatActivity implements View.OnClickListener{
 
-    //References to Database
-    final DatabaseReference ref = MainActivity.mainRef; // = FirebaseDatabase.getInstance().getReference();
-    //final DatabaseReference resourcesRef = ref.child("Resources");
-    //final DatabaseReference decksRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://cakespromoteobesity.firebaseio.com/Decks");
-    final DatabaseReference decksRef = MainActivity.mainRef.child("Decks"); // = FirebaseDatabase.getInstance().getReference().child("Decks");
-
+    final DatabaseReference ref = MainActivity.mainRef;
+    final DatabaseReference decksRef = MainActivity.mainRef.child("Decks");
 
     EditText lobbyName;
     EditText lobbyPassword;
@@ -55,7 +51,6 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     private List<String> deckListString;
     String mLobbyKey;
     User mUser = MainActivity.mUser;
-
     int maxPlayer,winPoints;
 
     @Override
@@ -119,9 +114,6 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 }catch(NumberFormatException _e) {
                     _e.printStackTrace();
                 }
-                //deckList List<decks> -> now used
-                //List<String> deckIndexSelected = dropdown_decks.getSelectedStrings();
-
                 List<Integer> deckIndexSelected = dropdown_decks.getSelectedIndicies();
                 List<Deck> selectedDecks = new ArrayList<Deck>();
                 for (int i = 0; i < deckIndexSelected.size(); i++) {

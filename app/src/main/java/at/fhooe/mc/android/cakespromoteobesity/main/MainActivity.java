@@ -22,7 +22,6 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
  * and the Option to enter a User Name for the Game.
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private static final String TAG = "MainActivity Test";
     private Button mJoinLobby, mCreateLobby;
     private EditText et_playerName;
     public static User mUser;
@@ -74,12 +73,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Leads to CreateLobby Activity and Pushes User to Firebase, if the entered Username Letter Size is > 3
             case R.id.btn_createLobby: {
                 i = new Intent(this, CreateLobby.class);
+                //If the user hasn't made an User-Object yet, it gets created and pushed to Firebase
                 if (mUser == null) {
                     mPlayerName = et_playerName.getText().toString();
                     if(mPlayerName.length() < 4){
                         Toast.makeText(this, "Your user name must have at least 4 letters", Toast.LENGTH_SHORT).show();
-                        //enterPlayerName();
-
                     }else{
                         mUserKey = usersRef.push().getKey();
                         mUser = new User(mPlayerName,mUserKey);
@@ -93,12 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.btn_joinLobby: {
                 i = new Intent(this, JoinLobby.class);
+                //If the user hasn't made an User-Object yet, it gets created and pushed to Firebase
                 if (mUser == null) {
                     mPlayerName = et_playerName.getText().toString();
                     if(mPlayerName.length() < 4){
                         Toast.makeText(this, "Playername must have at least 4 Letters", Toast.LENGTH_SHORT).show();
-                        //enterPlayerName();
-
                     }else{
                         mUserKey = usersRef.push().getKey();
                         mUser = new User(mPlayerName,mUserKey);
@@ -125,40 +122,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mUser = null;
         }
     }
-
-    /* void enterPlayerName() {
-
-            //User has not entered a name yet
-            AlertDialog.Builder playerNameDialog = new AlertDialog.Builder(this);
-            playerNameDialog.setTitle("Enter Player Name");
-
-
-            final EditText input = new EditText(this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            playerNameDialog.setView(input);
-
-            playerNameDialog.setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            mPlayerName = input.getText().toString();
-                            mUser = new User(mPlayerName);
-                            mUserKey = usersRef.push().getKey();
-                            usersRef.child(mUserKey).setValue(mUser);
-                            startActivity(i);
-                        }
-                    });
-
-            playerNameDialog.setNegativeButton("Dismiss",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-            //AlertDialog dialog = playerNameDialog.create();
-            playerNameDialog.show();
-        }
-*/
 }
 

@@ -38,6 +38,9 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     }
 
 
+    /**
+     * Defines the object elements to the UI Elements
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //ViewHolder needs to contain an variable for every View,Button,etc... of the LobbyList item
         public TextView tv_lobbyName, tv_lobbyHost, tv_lobbyPlayers, tv_lobbyDeckList;
@@ -55,11 +58,6 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
 
         }
     }
-
-    private Context getContext() {
-        return mContext;
-    }
-
 
     //Automatically implemented
     @Override

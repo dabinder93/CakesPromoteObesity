@@ -15,8 +15,8 @@ public class UserGame implements Serializable {
     private int mCardCount;
     private List<String> mCardsInHand;
     private int mPoints;
-    private String mSelectedCard;
 
+    //Firebase
     public UserGame(){}
 
     public UserGame(String _name){
@@ -24,14 +24,21 @@ public class UserGame implements Serializable {
         mCardCount = 0;
         mCardsInHand = new ArrayList<>();
         mPoints = 0;
-        mSelectedCard = "";
     }
 
+    /**
+     * Adds a card to the Users Hand List
+     * @param cardText String of the card the User gets in his Hand
+     */
     public void addCardToHand(String cardText) {
         if (mCardsInHand == null) mCardsInHand = new ArrayList<>();
             mCardsInHand.add(cardText);
     }
 
+    /**
+     * Iterates throught the User's Cards List and removes the card with the same text as the parameter
+     * @param _cardText String of card that should be removed
+     */
     public void removeCardFromHand(String _cardText){
         Iterator<String> iterator = mCardsInHand.iterator();
         while(iterator.hasNext()){
@@ -43,46 +50,74 @@ public class UserGame implements Serializable {
         }
     }
 
+    /**
+     * returns the User's name
+     * @return String UserName
+     */
     public String getmName() {
         return mName;
     }
 
+    /**
+     * sets the User's name
+     * @param mName String of User's new name
+     */
     public void setmName(String mName) {
         this.mName = mName;
     }
 
+    /**
+     * returns the Number of cards in a User's hand
+     * @return int of CardCount
+     */
     public int getmCardCount() {
         return mCardCount;
     }
 
+    /**
+     * sets the value of the number of cards in a user's hand
+     * @param mCardCount new value of cards in user's hand
+     */
     public void setmCardCount(int mCardCount) {
         this.mCardCount = mCardCount;
     }
 
+    /**
+     * returns the list of cards in a user's hand
+     * @return List<String> cards in a user's hand
+     */
     public List<String> getmCardsInHand() {
         return mCardsInHand;
     }
 
+    /**
+     * sets a list of cards in a user's hand
+     * @param mCardsInHand List<String> of cards of the user's new hand
+     */
     public void setmCardsInHand(List<String> mCardsInHand) {
         this.mCardsInHand = mCardsInHand;
     }
 
+    /**
+     * get the current points a user has gotten yet
+     * @return int current points from a user
+     */
     public int getmPoints() {
         return mPoints;
     }
 
+    /**
+     * sets the points a user has gotten
+     * @param mPoints int new value of points from a user
+     */
     public void setmPoints(int mPoints) {
         this.mPoints = mPoints;
     }
 
-    public String getmSelectedCard() {
-        return mSelectedCard;
-    }
-
-    public void setmSelectedCard(String mSelectedCard) {
-        this.mSelectedCard = mSelectedCard;
-    }
-
+    /**
+     * returns a String for the scoreboard-listview
+     * @return String for listview
+     */
     @Override
     public String toString() {
         return mName + "\n \t" + mPoints;
