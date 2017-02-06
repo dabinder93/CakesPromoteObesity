@@ -16,6 +16,7 @@ public class CurrentRound implements Serializable {
     private List<CardWithUser> mCardWithUserList;
     private int mPickCount;
     private String mPromptInPlay;
+    private int mCzarPickID;
     //private CardWithUser mSelectedCard;
 
     //Firebase
@@ -25,6 +26,7 @@ public class CurrentRound implements Serializable {
         mCardWithUserList = new ArrayList<CardWithUser>();
         mPickCount = _pickcount;
         mPromptInPlay = "";
+        mCzarPickID = 0;
     }
 
     /**
@@ -81,5 +83,21 @@ public class CurrentRound implements Serializable {
      */
     public void setmPromptInPlay(String mPromptInPlay) {
         this.mPromptInPlay = mPromptInPlay;
+    }
+
+    /**
+     * returns the id of the card the czar has picked
+     * @return int id of card
+     */
+    public int getmCzarPickID() {
+        return mCzarPickID;
+    }
+
+    /**
+     * sets a new id of the card the czar has picked
+     * @param mCzarPickID int of new id of card
+     */
+    public void setmCzarPickID(int mCzarPickID) {
+        this.mCzarPickID = mCzarPickID;
     }
 }

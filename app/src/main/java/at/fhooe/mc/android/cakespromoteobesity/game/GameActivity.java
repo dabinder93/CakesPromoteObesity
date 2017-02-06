@@ -401,8 +401,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         //check if noone chose a card
         if (mGame.getmCurrentRound().getmPickCount() == 0) {
             Toast.makeText(GameActivity.this,"No one picked a card! The czar gets the point.",Toast.LENGTH_SHORT).show();
-            mGame.getmUserGameList().get(mGame.getmCzarID()).setmPoints(mGame.getmUserGameList().get(mGame.getmCzarID()).getmPoints()+1);
-            if (mGame.getmUserGameList().get(mGame.getmCzarID()).getmPoints() == mGame.getmWinpoints()) {
+
+            int czarpoint = mGame.getmUserGameList().get(mGame.getmCzarID()).getmPoints()+1;
+            //mGame.getmUserGameList().get(mGame.getmCzarID()).setmPoints(mGame.getmUserGameList().get(mGame.getmCzarID()).getmPoints()+1);
+            if (czarpoint == mGame.getmWinpoints()) {
                 mStatusView.setText("The Winner is " + mGame.getmUserGameList().get(mGame.getmCzarID()).getmName());
                 try {
                     Thread.sleep(3000);
@@ -410,11 +412,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
                 if (mUser.getmUserGameID() == mGame.getmCzarID()) {
+                    mGame.getmUserGameList().get(mGame.getmCzarID()).setmPoints(czarpoint);
                     mGame.setmGameStatus(6);
                     ref.child(mGame.getmGameKey()).setValue(mGame);
                 }
             }else {
                 if (mUser.getmUserGameID() == mGame.getmCzarID()) {
+                    mGame.getmUserGameList().get(mGame.getmCzarID()).setmPoints(czarpoint);
                     mGame.getmCurrentRound().setmPickCount(0);
                     mGame.getmCurrentRound().setmCardWithUserList(new ArrayList<CardWithUser>());
                     mGame.setmCzarID((mGame.getmCzarID()+1)%mGame.getmUsersInGame());
