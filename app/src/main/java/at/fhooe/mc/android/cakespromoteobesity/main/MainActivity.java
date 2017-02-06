@@ -141,7 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             }
-
+            case R.id.exit: {
+                if (mUser != null) {
+                    usersRef.child(mUser.getmUserKey()).removeValue();
+                    mUser = null;
+                }
+                System.exit(0);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -24,17 +24,17 @@
         <big>To start the game, each player draws ten White Cards.</big> \n
         <big>One random Player begins as the so called</big> <b>„Card Czar“</b><big>.</big>
         \n \n
-        <big>A Black Card will be revealed to all Players.
-        Everyone (except the Czar) answers the question or fills in the blank by selecting one white Card from their hand.</big>
+        <big>A Black Card will be revealed to all Players. \n
+        Everyone (except the Czar) answers the question or fills in the blank written on that black card, by selecting one white Card from their hand.</big>
         \n
         <big>After everyone selected a Card, or when the Countdown went to 0, those cards are presented to the Card Czar.</big>
         \n \n
         <big>Now the Czar has 60 seconds to pick the funniest play, and whoever submitted it gets one Awesome Point.</big> \n
-        <big>If no one selected a card, the Czar gets one Point.</big> \n
+        <big>If no one selected a card, the Czar gets a Point.</big> \n
         <big>If the Czar didn’t pick a card, he loses one Point.</big>
         \n \n
         <big>After the round, a new player becomes the Card Czar, and everyone else draws back up to ten White Cards.</big>
         \n \n
-        <b>Whoever reaches the defined Win Points first, wins the Game!</b>
+        <b>Whoever reaches the defined Win Points, wins the Game!</b>
     </string>
 </resources>
