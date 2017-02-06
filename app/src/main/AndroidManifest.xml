@@ -21,7 +21,8 @@
         <activity android:name=".lobby.JoinLobby" />
         <activity android:name=".lobby.LobbyOverview" />
         <activity android:name=".game.GameActivity" />
-        <activity android:name=".game.ScoreboardActvity"></activity>
+        <activity android:name=".game.ScoreboardActvity" />
+        <activity android:name=".extra.RulesActivity"></activity>
     </application>
 
 </manifest>

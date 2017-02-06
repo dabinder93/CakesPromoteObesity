@@ -3,11 +3,11 @@
     <string name="btn_txt_createLobby">Create a Lobby</string>
     <string name="btn_txt_joinLobby">Join a Lobby</string>
     <string name="tv_txt_players">Max Players:</string>
-    <string name="tv_txt_winpoints">Points needed to win:</string>
-    <string name="tv_txt_decks">Decks used for the game:</string>
+    <string name="tv_txt_winpoints">Win Points:</string>
+    <string name="tv_txt_decks">Decks:</string>
     <string name="btn_txt_startLobby">Start the lobby</string>
-    <string name="tv_txt_lobbyname">Lobby Name</string>
-    <string name="tv_txt_lobbyPassword">Password</string>
+    <string name="tv_txt_lobbyname">Lobby Name:</string>
+    <string name="tv_txt_lobbyPassword">Password:</string>
     <string name="tv_txt_playerName">Enter your Player Name</string>
     <string name="btn_text_item_join">Join</string>
     <string name="tv_txt_lobby_item_decks">Decks:</string>
@@ -19,4 +19,22 @@
     <string name="txt_scoreboard">Scoreboard</string>
     <string name="btn_txt_scoreboard_return">Return to menu</string>
     <string name="txt_game_setup">Setting up game ...</string>
+    <string name="tv_txt_rulesHeader">Rules</string>
+    <string name="tv_txt_rules">
+        <big>To start the game, each player draws ten White Cards.</big> \n
+        <big>One random Player begins as the so called</big> <b>„Card Czar“</b><big>.</big>
+        \n \n
+        <big>A Black Card will be revealed to all Players.
+        Everyone (except the Czar) answers the question or fills in the blank by selecting one white Card from their hand.</big>
+        \n
+        <big>After everyone selected a Card, or when the Countdown went to 0, those cards are presented to the Card Czar.</big>
+        \n \n
+        <big>Now the Czar has 60 seconds to pick the funniest play, and whoever submitted it gets one Awesome Point.</big> \n
+        <big>If no one selected a card, the Czar gets one Point.</big> \n
+        <big>If the Czar didn’t pick a card, he loses one Point.</big>
+        \n \n
+        <big>After the round, a new player becomes the Card Czar, and everyone else draws back up to ten White Cards.</big>
+        \n \n
+        <b>Whoever reaches the defined Win Points first, wins the Game!</b>
+    </string>
 </resources>

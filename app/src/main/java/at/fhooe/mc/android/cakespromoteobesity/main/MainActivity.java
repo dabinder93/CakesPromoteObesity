@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.extra.RulesActivity;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final DatabaseReference mainRef = FirebaseDatabase.getInstance().getReference();
     final DatabaseReference usersRef = mainRef.child("Users");
     Intent i;
+    private MenuItem rules;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCreateLobby.setOnClickListener(this);
         mJoinLobby.setOnClickListener(this);
         et_playerName = (EditText) findViewById(R.id.et_playerName);
-
 
         //Get a deck into Decks-Branch
         /*String deckName = "UK Starter Kit";
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //will be disabled
         if (mUser != null) {
             et_playerName.setVisibility(View.GONE);
-            findViewById(R.id.tv_playerName).setVisibility(View.GONE);
+            //findViewById(R.id.tv_playerName).setVisibility(View.GONE);
         }
         Log.i("TAG", "in onResume");
     }
@@ -121,6 +124,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             usersRef.child(mUser.getmUserKey()).removeValue();
             mUser = null;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_rules, menu);
+        rules = menu.findItem(R.id.rules);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.rules: {
+                Intent i = new Intent(this, RulesActivity.class);
+                startActivity(i);
+                break;
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

@@ -70,12 +70,12 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
 
         //Player count Spinner
         String[] items_players = new String[]{"3", "4", "5", "6", "7", "8"};
-        ArrayAdapter<String> adapter_players = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items_players);
+        ArrayAdapter<String> adapter_players = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, items_players);
         dropdown_players.setAdapter(adapter_players);
 
         //Points to Win Spinner
         String[] items_winpoints = new String[]{"3", "4", "5", "6", "7", "8", "9", "10"};
-        ArrayAdapter<String> adapter_winpoints = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items_winpoints);
+        ArrayAdapter<String> adapter_winpoints = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, items_winpoints);
         dropdown_winpoints.setAdapter(adapter_winpoints);
 
         //Get Deck Names for each existing Deck from Database -> stores it in decklist

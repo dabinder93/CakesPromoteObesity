@@ -21,7 +21,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:text="Lobby Name: "
@@ -54,8 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="1"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:text="@string/tv_txt_Host"
@@ -78,7 +78,8 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:text="@string/tv_txt_lobby_item_decks"
@@ -115,5 +116,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_lobbyOV_startGame"
         android:layout_weight="1"
-        android:layout_marginTop="5dp" />
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/border"
+        android:layout_marginTop="10dp" />
 </LinearLayout>
