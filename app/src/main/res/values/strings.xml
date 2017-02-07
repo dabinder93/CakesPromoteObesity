@@ -3,7 +3,7 @@
     <string name="btn_txt_createLobby">Create a Lobby</string>
     <string name="btn_txt_joinLobby">Join a Lobby</string>
     <string name="tv_txt_players">Max Players:</string>
-    <string name="tv_txt_winpoints">Win Points:</string>
+    <string name="tv_txt_winpoints">Points to win:</string>
     <string name="tv_txt_decks">Decks:</string>
     <string name="btn_txt_startLobby">Start the lobby</string>
     <string name="tv_txt_lobbyname">Lobby Name:</string>

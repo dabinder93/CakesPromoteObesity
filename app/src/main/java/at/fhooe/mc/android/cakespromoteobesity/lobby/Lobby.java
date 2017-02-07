@@ -9,7 +9,7 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 /**
  * Lobby Object, with all needed Variables
- * Constructor only gets called when a user creates a lobby
+ * Constructor only gets called when a user creates a mLobby
  * Default constructor needed for Firebase
  */
 public class Lobby implements Serializable{
@@ -22,6 +22,7 @@ public class Lobby implements Serializable{
     private List<String> mUserList;
     private int mUsersInLobby;
     private boolean mGameIsStarting;
+    private int mUserSwitchID;
 
 
     //Firebase
@@ -38,19 +39,20 @@ public class Lobby implements Serializable{
         mUsersInLobby = 1;
         mUserList = new ArrayList<String>();
         mUserList.add(_user.getmName());
+        mUserSwitchID = 0;
     }
 
     /**
-     * return the amount of the users in lobby
-     * @return int of users in lobby
+     * return the amount of the users in mLobby
+     * @return int of users in mLobby
      */
     public int getmUsersInLobby() {
         return mUsersInLobby;
     }
 
     /**
-     * sets new value for users in lobby
-     * @param mUsersInLobby int new value for users in lobby
+     * sets new value for users in mLobby
+     * @param mUsersInLobby int new value for users in mLobby
      */
     public void setmUsersInLobby(int mUsersInLobby) {
         this.mUsersInLobby = mUsersInLobby;
@@ -58,7 +60,7 @@ public class Lobby implements Serializable{
 
     /**
      * Gets the User Names in a list
-     * @return List<String> which contains users in lobby names
+     * @return List<String> which contains users in mLobby names
      */
     public List<String> getmUserList() {
         return mUserList;
@@ -73,8 +75,8 @@ public class Lobby implements Serializable{
     }
 
     /**
-     * get lobby name
-     * @return String of lobby name
+     * get mLobby name
+     * @return String of mLobby name
      */
     public String getmName() {
         return mName;
@@ -89,7 +91,7 @@ public class Lobby implements Serializable{
     }
 
     /**
-     * Gets the Password which is selected for the lobby
+     * Gets the Password which is selected for the mLobby
      * @return String of password
      */
     public String getmPassword() {
@@ -97,7 +99,7 @@ public class Lobby implements Serializable{
     }
 
     /**
-     * set Password for the lobby
+     * set Password for the mLobby
      * @param mPassword String of the password
      */
     public void setmPassword(String mPassword) {
@@ -105,7 +107,7 @@ public class Lobby implements Serializable{
     }
 
     /**
-     * gets the value of the maxPlayers who can join the lobby
+     * gets the value of the maxPlayers who can join the mLobby
      * @return int of the maxPlayers amount
      */
     public int getmMaxPlayers() {
@@ -182,6 +184,22 @@ public class Lobby implements Serializable{
      */
     public void setmGameIsStarting(boolean mGameIsStarting) {
         this.mGameIsStarting = mGameIsStarting;
+    }
+
+    /**
+     * returns the player who is allowed to switch to the game
+     * @return int id of players allowed to switch
+     */
+    public int getmUserSwitchID() {
+        return mUserSwitchID;
+    }
+
+    /**
+     * sets the userSwitchID for the user who is allowed to switch
+     * @param mUserSwitchID int new userID who is allowed to switch
+     */
+    public void setmUserSwitchID(int mUserSwitchID) {
+        this.mUserSwitchID = mUserSwitchID;
     }
 }
 

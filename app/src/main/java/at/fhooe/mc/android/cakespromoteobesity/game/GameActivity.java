@@ -486,13 +486,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
      * If someone won the game, status goes to 6 else 1.
      */
     private void checkPointsForRound() {
-        int userID = 0;
+        /*int userID = 0;
         for (CardWithUser cwu : mGame.getmCurrentRound().getmCardWithUserList()) {
             if (cwu.getmCardText().equals(selectedCard)) {
                 userID = cwu.getmUserGameID();
                 break;
             }
-        }
+        }*/
+        int userID = mGame.getmCurrentRound().getmCardWithUserList().get(mGame.getmCurrentRound().getmCzarPickID()).getmUserGameID();
+
         mStatusView.setText("The point goes to " + mGame.getmUserGameList().get(userID).getmName());
         mGame.getmUserGameList().get(userID).setmPoints(mGame.getmUserGameList().get(userID).getmPoints() + 1);
 
@@ -601,13 +603,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         if (mPlayersAreChoosing) {
+            //Players select a card
             if(!hasSelectedCard){
                 selectedCard = mGame.getmUserGameList().get(mUser.getmUserGameID()).getmCardsInHand().get(position);
             }
             Log.i("GameActivity", "selected Card  = " + selectedCard);
         }else {
+            //Czar selects a card
             if(!hasSelectedCard){
                 selectedCard = mGame.getmCurrentRound().getmCardWithUserList().get(position).getmCardText();
+                mGame.getmCurrentRound().setmCzarPickID(position);
             }
             Log.i("GameActivity", "selected Card  = " + selectedCard);
         }

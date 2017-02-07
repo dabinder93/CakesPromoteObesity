@@ -47,7 +47,7 @@ public class JoinLobby extends AppCompatActivity {
     }
 
     /**
-     * Listener which fetches the lobby object from database and updates the LobbyListView
+     * Listener which fetches the mLobby object from database and updates the LobbyListView
      */
     private void setUpLobbyList() {
         //Set up the List of Lobbies

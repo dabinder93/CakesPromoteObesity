@@ -1,13 +1,16 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +27,14 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
 /**
  * LobbyListAdapter is building up the Lobby Items for the List
  * It gets the items TextViews,Buttons,... from the activity_lobby_item.xml file
- * It also includes the OnClickListener for the Join-Buttons that will get the player into the lobby
+ * It also includes the OnClickListener for the Join-Buttons that will get the player into the mLobby
  */
 public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.ViewHolder> {
 
     private List<Lobby> mLobbyList;
     private Context mContext;
     private User mUser;
+    private AlertDialog.Builder passwordBuilder;
 
     public LobbyListAdapter(Context _context, final List<Lobby> _obj) {
         mLobbyList = _obj;
@@ -99,27 +103,41 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Join the lobby
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(lobby.getmLobbyKey());
+                //Join the mLobby - outsourced to enterLobby()
+                //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(lobby.getmLobbyKey());
                 //Toast.makeText(getContext(),"Button wurde gedrückt",Toast.LENGTH_SHORT).show();
 
                 if (mLobbyList.get(_position).getmUsersInLobby() < mLobbyList.get(_position).getmMaxPlayers()) {
-                    mUser = MainActivity.mUser;
-                    mLobbyList.get(_position).getmUserList().add(mUser.getmName());
-                    mLobbyList.get(_position).setmUsersInLobby(mLobbyList.get(_position).getmUsersInLobby()+1);
-                    ref.setValue(mLobbyList.get(_position));
+                    //check if password
+                    if (!mLobbyList.get(_position).getmPassword().equals("")) {
+                        //go check password
+                        passwordBuilder = new AlertDialog.Builder(mContext);
+                        passwordBuilder.setMessage("Enter the Lobby Password");
+                        passwordBuilder.setCancelable(true);
+                        final EditText passwordText = new EditText(mContext);
+                        passwordBuilder.setView(passwordText);
 
-                    mUser.setmUserGameID(mLobbyList.get(_position).getmUsersInLobby()-1);
-
-                    mUser.setmIsHost(false);
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey()).setValue(mUser);
-                    MainActivity.mUser = mUser;
-
-                    Intent i = new Intent(mContext, LobbyOverview.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("LobbyObject", mLobbyList.get(_position));
-                    i.putExtras(bundle);
-                    mContext.startActivity(i);
+                        passwordBuilder.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Enter the lobby
+                                if (passwordText.getText().toString().equals(mLobbyList.get(_position).getmPassword())) {
+                                    dialogInterface.cancel();
+                                    enterLobby(_position);
+                                }else {
+                                    passwordBuilder.setMessage("Wrong password! Try again.");
+                                }
+                            }
+                        });
+                        passwordBuilder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                        AlertDialog passwordDialog = passwordBuilder.create();
+                        passwordDialog.show();
+                    }else enterLobby(_position);
                 }else Toast.makeText(mContext,"Lobby is currently full",Toast.LENGTH_SHORT).show();
             }
         });
@@ -128,5 +146,26 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     @Override
     public int getItemCount() {
         return mLobbyList.size();
+    }
+
+    private void enterLobby(int _position) {
+        //Log.i("LobbyListAdapter","Entered the enterLobby() method");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Lobbies").child(mLobbyList.get(_position).getmLobbyKey());
+        mUser = MainActivity.mUser;
+        mLobbyList.get(_position).getmUserList().add(mUser.getmName());
+        mLobbyList.get(_position).setmUsersInLobby(mLobbyList.get(_position).getmUsersInLobby()+1);
+        ref.setValue(mLobbyList.get(_position));
+
+        mUser.setmUserGameID(mLobbyList.get(_position).getmUsersInLobby()-1);
+
+        mUser.setmIsHost(false);
+        FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getmUserKey()).setValue(mUser);
+        MainActivity.mUser = mUser;
+
+        Intent i = new Intent(mContext, LobbyOverview.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("LobbyObject", mLobbyList.get(_position));
+        i.putExtras(bundle);
+        mContext.startActivity(i);
     }
 }
