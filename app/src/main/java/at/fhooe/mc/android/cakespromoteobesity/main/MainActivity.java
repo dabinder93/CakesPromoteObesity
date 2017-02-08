@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
+import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.extra.RulesActivity;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("TAG", "in OnCreate");
+        //Log.i("TAG", "in OnCreate");
 
         mCreateLobby = (Button) findViewById(R.id.btn_createLobby);
         mJoinLobby = (Button) findViewById(R.id.btn_joinLobby);
@@ -50,10 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Get a deck into Decks-Branch
         /*String deckName = "UK Starter Kit";
         String deckID = "UKMain";
-        int whiteCard = 34;
-        int blackCard = 65;
+        int whiteCard = 460;
+        int blackCard = 90;
         Deck deck = new Deck(deckName,deckID,blackCard,whiteCard);
-        String key = mainRef.child("Decks").push().getKey();
         mainRef.child("Decks").child(deckID).setValue(deck);*/
 
     }

@@ -22,8 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +55,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private MenuItem lockCard;
     private boolean hasSelectedCard, mPlayersAreChoosing;
     private ProgressBar loadingBar;
+
+    private final int DO_NOTHING = 0;
+    private final int FILL_CARDS_UP = 1;
+    private final int GET_PROMPT = 2;
+    private final int PLAYERS_CHOOSE_CARD = 3;
+    private final int CZAR_CHOOSES_CARD = 4;
+    private final int CHECK_POINTS_FOR_ROUND = 5;
+    private final int DISCONNECT_FROM_GAME = 6;
 
 
     @Override
@@ -118,39 +124,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i("GameActivity", "mGame is overwritten");
                 Log.i("GameActivity", "GameStatus has value " + String.valueOf(mGame.getmGameStatus()));
                 switch (mGame.getmGameStatus()) {
-                    case 0 : {
-                        //nothing (new) should happen
+                    case DO_NOTHING : {
                     }break;
-                    case 1 : {
-                        //Host is filling missing Cards up
+                    case FILL_CARDS_UP : {
                         if (mUser.isHost()) fillCardsUp();
                     }break;
-                    case 2 : {
-                        //Round starting, Prompt gets played
+                    case GET_PROMPT: {
                         if (mUser.isHost()) getPrompt();
                     }break;
-                    case 3 : {
-                        //Round starting, Prompt gets played
+                    case PLAYERS_CHOOSE_CARD : {
                         playersChooseCard();
                     }break;
-                    case 4 : {
-                        //Czar chooses a Card
+                    case CZAR_CHOOSES_CARD : {
                         countdownValPlayer = 1;
                         czarChoosesCard();
                     }break;
-                    case 5 : {
-                        //Check the points from the round
+                    case CHECK_POINTS_FOR_ROUND : {
                         countDownValCzar = 1;
                         checkPointsForRound();
                     }break;
-                    case 6 : {
-                        //Disconnect all Players from the Game
+                    case DISCONNECT_FROM_GAME : {
                         disconnectFromGame();
                     }break;
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }

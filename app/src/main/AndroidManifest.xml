@@ -10,19 +10,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".main.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lobby.CreateLobby" />
-        <activity android:name=".lobby.JoinLobby" />
-        <activity android:name=".lobby.LobbyOverview" />
-        <activity android:name=".game.GameActivity" />
-        <activity android:name=".game.ScoreboardActvity" />
-        <activity android:name=".extra.RulesActivity"></activity>
+        <activity android:name=".lobby.CreateLobby"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".lobby.JoinLobby"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".lobby.LobbyOverview"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".game.GameActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".game.ScoreboardActvity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".extra.RulesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
