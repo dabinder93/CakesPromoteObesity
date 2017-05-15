@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.DeckInfo;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 
 /**
@@ -18,7 +18,7 @@ public class Lobby implements Serializable{
     private int mMaxPlayers;
     private int mWinpoints;
     private String mLobbyKey;
-    private List<Deck> mSelectedDecks;
+    private List<DeckInfo> mSelectedDecks;
     private List<String> mUserList;
     private int mUsersInLobby;
     private boolean mGameIsStarting;
@@ -28,7 +28,7 @@ public class Lobby implements Serializable{
     //Firebase
     public Lobby(){}
 
-    public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, String _lobbyID, List<Deck> _selectedDecks, User _user){
+    public Lobby(String _name, String _password, int _maxPlayers, int _winPoints, String _lobbyID, List<DeckInfo> _selectedDecks, User _user){
         mName = _name;
         mPassword = _password;
         mMaxPlayers = _maxPlayers;
@@ -140,17 +140,17 @@ public class Lobby implements Serializable{
 
     /**
      * Gets a list of decks which are selected for the game
-     * @return List<Deck> of selected decks
+     * @return List<DeckInfo> of selected decks
      */
-    public List<Deck> getmDecks() {
+    public List<DeckInfo> getmDecks() {
         return mSelectedDecks;
     }
 
     /**
      * set a new list of selected decks
-     * @param mDecks List<Deck> new deck list
+     * @param mDecks List<DeckInfo> new deck list
      */
-    public void setmDecks(List<Deck> mDecks) {
+    public void setmDecks(List<DeckInfo> mDecks) {
         this.mSelectedDecks = mDecks;
     }
 

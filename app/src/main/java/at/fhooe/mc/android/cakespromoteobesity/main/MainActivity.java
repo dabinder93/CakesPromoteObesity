@@ -11,11 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
+import at.fhooe.mc.android.cakespromoteobesity.card.DeckInfo;
 import at.fhooe.mc.android.cakespromoteobesity.extra.RulesActivity;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
@@ -35,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final DatabaseReference usersRef = mainRef.child("Users");
     Intent i;
     private MenuItem rules;
+    ArrayList<Deck> mDecksTest;
+    Deck mTestDeck;
+    ArrayList<DeckInfo> mDeckInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +63,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String deckID = "UKMain";
         int whiteCard = 460;
         int blackCard = 90;
-        Deck deck = new Deck(deckName,deckID,blackCard,whiteCard);
+        DeckInfo deck = new DeckInfo(deckName,deckID,blackCard,whiteCard);
         mainRef.child("Decks").child(deckID).setValue(deck);*/
+
+        //Test out new Deck -> this is working and getting used now
+        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference().child("Resources-official");
+        testRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("Main","TestRef");
+                mDecksTest = new ArrayList<>();
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Deck deck = snap.getValue(Deck.class);
+                    mDecksTest.add(deck);
+                }
+                Log.i("Main","DecksCount: " + mDecksTest.size());
+                Collections.sort(mDecksTest);
+
+                //Uploads the DeckInfos into the chosen path
+                mDeckInfoList = new ArrayList<DeckInfo>();
+                DatabaseReference infoRef = FirebaseDatabase.getInstance().getReference().child("DeckInfo-official");
+                for (int i = 0; i < mDecksTest.size(); i++) {
+                    Deck deck = mDecksTest.get(i);
+                    mDeckInfoList.add(new DeckInfo(deck));
+                    Log.i("Main","Name = " + deck.getName());
+                }
+                //Collections.sort(mDeckInfoList);
+                infoRef.setValue(mDeckInfoList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
     }
 

@@ -1,91 +1,88 @@
 package at.fhooe.mc.android.cakespromoteobesity.card;
 
-import java.io.Serializable;
+import android.support.annotation.NonNull;
+
+import java.util.List;
 
 /**
- * Deck Objects are used when creating a new game.
- * The spinner calls the Firebase DB in the "Decks" Branch to
- * showcase all available Decks a User can choose for his/her game
+ * Created by Bastian on 28.04.2017.
  */
-public class Deck implements Serializable{
+public class Deck implements Comparable<Deck> {
 
-    private String mDeckName;
-    private String mDeckID;
-    private int mBlackCardCount;
-    private int mWhiteCardCount;
-
-    //Only gets called when a developer wants to add a deck to the database
-    public Deck(String _name, String _deckID, int _blackCardCount, int _whiteCardCount){
-        mDeckName = _name;
-        mDeckID = _deckID;
-        mBlackCardCount = _blackCardCount;
-        mWhiteCardCount = _whiteCardCount;
-    }
+    private String Name;
+    private String Id;
+    private String Icon;
+    private List<Prompt> Prompts;
+    private List<String> Responses;
+    private int Sort;
 
     //Firebase
     public Deck() {}
 
-    /**
-     * gets the amount of responses in a deck
-     * @return int responsecount
-     */
-    public int getmWhiteCardCount() {
-        return mWhiteCardCount;
+    public String getIcon() {
+        return Icon;
     }
 
-    /**
-     * sets the responsecount of a deck
-     * @param mCardCount int new responsecount
-     */
-    public void setmWhiteCardCount(int mCardCount) {
-        this.mWhiteCardCount = mCardCount;
+    public void setIcon(String icon) {
+        this.Icon = icon;
     }
 
-    /**
-     * gets the amount of prompts in a deck
-     * @return int promptcount
-     */
-    public int getmBlackCardCount() {
-        return mBlackCardCount;
+    public String getName() {
+        return Name;
     }
 
-    /**
-     * sets the promptcount of a deck
-     * @param mCardCount int new promptcount
-     */
-    public void setmBlackCardCount(int mCardCount) {
-        this.mBlackCardCount = mCardCount;
+    public void setName(String name) {
+        this.Name = name;
     }
 
-    /**
-     * returns the Decks name
-     * @return String decks name
-     */
-    public String getmDeckName() {
-        return mDeckName;
+    public String getId() {
+        return Id;
     }
 
-    /**
-     * sets the decks name
-     * @param mDeckName String decks new name
-     */
-    public void setmDeckName(String mDeckName) {
-        this.mDeckName = mDeckName;
+    public void setId(String id) {
+        this.Id = id;
     }
 
-    /**
-     * returns the decks id
-     * @return string decks id
-     */
-    public String getmDeckID() {
-        return mDeckID;
+    public List<Prompt> getPrompts() {
+        return Prompts;
     }
 
-    /**
-     * sets the decks id
-     * @param mDeckID String new decks id
-     */
-    public void setmDeckID(String mDeckID) {
-        this.mDeckID = mDeckID;
+    public void setPrompts(List<Prompt> prompts) {
+        this.Prompts = prompts;
+    }
+
+    public List<String> getResponses() {
+        return Responses;
+    }
+
+    public void setResponses(List<String> responses) {
+        this.Responses = responses;
+    }
+
+    public int getSort() {
+        return Sort;
+    }
+
+    public void setSort(int sort) {
+        Sort = sort;
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuffer b = new StringBuffer();
+        b.append(getName() + "\n" + getId() + "\n");
+        for (Prompt p : getPrompts()) {
+            b.append(p.getText());
+        }
+        for (String s : getResponses()) {
+            b.append(s);
+        }
+        return b.toString();
+    }
+
+    @Override
+    public int compareTo(@NonNull Deck deck) {
+        return getSort() - deck.getSort();
     }
 }

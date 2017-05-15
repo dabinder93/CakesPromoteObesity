@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.card.CardWithUser;
+import at.fhooe.mc.android.cakespromoteobesity.card.Prompt;
 
 /**
  * CurrentRound Objects get created when there is a new game created.
@@ -15,7 +16,7 @@ public class CurrentRound implements Serializable {
 
     private List<CardWithUser> mCardWithUserList;
     private int mPickCount;
-    private String mPromptInPlay;
+    private Prompt mPromptInPlay;
     private int mCzarPickID;
     //private CardWithUser mSelectedCard;
 
@@ -25,7 +26,7 @@ public class CurrentRound implements Serializable {
     public CurrentRound(int _pickcount){
         mCardWithUserList = new ArrayList<CardWithUser>();
         mPickCount = _pickcount;
-        mPromptInPlay = "";
+        mPromptInPlay = new Prompt();
         mCzarPickID = 0;
     }
 
@@ -73,7 +74,7 @@ public class CurrentRound implements Serializable {
      * return the String of the Prompt which is currently Displayed to the users
      * @return String of promptInPlay
      */
-    public String getmPromptInPlay() {
+    public Prompt getmPromptInPlay() {
         return mPromptInPlay;
     }
 
@@ -81,7 +82,7 @@ public class CurrentRound implements Serializable {
      * set a new Card as the prompt in Play
      * @param mPromptInPlay String of new card which should be displayed to the users
      */
-    public void setmPromptInPlay(String mPromptInPlay) {
+    public void setmPromptInPlay(Prompt mPromptInPlay) {
         this.mPromptInPlay = mPromptInPlay;
     }
 

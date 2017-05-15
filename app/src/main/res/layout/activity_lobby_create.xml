@@ -113,10 +113,10 @@
         android:layout_marginBottom="30dp">
 
         <TextView
-            android:text="@string/tv_txt_decks"
+            android:id="@+id/tv_decks_off"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_decks"
+            android:text="@string/tv_txt_decks_off"
             android:textSize="18sp" />
 
         <at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner
@@ -126,6 +126,19 @@
             android:layout_gravity="right|center_horizontal"
             android:gravity="right" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_decks_unoff"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_txt_decks_unoff"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <Button

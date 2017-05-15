@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
-import at.fhooe.mc.android.cakespromoteobesity.card.DeckGame;
+import at.fhooe.mc.android.cakespromoteobesity.card.DeckInfo;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.Lobby;
 import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
 
@@ -20,7 +19,7 @@ public class Game implements Serializable{
     private int mWinpoints;
     private String mGameKey;
     private int mResourcesCount;
-    private List<Deck> mSelectedDecks;
+    private List<DeckInfo> mSelectedDecks;
     private int mUsersInLobby;
     private int mUsersInGame;
     private int mGameStatus;
@@ -114,17 +113,17 @@ public class Game implements Serializable{
 
     /**
      * return list of Decks which are selected for the game
-     * @return List<Deck> of decks that are used in the game
+     * @return List<DeckInfo> of decks that are used in the game
      */
-    public List<Deck> getmSelectedDecks() {
+    public List<DeckInfo> getmSelectedDecks() {
         return mSelectedDecks;
     }
 
     /**
      * sets new list of selected Decks
-     * @param mSelectedDecks List<Deck> of new selected decks
+     * @param mSelectedDecks List<DeckInfo> of new selected decks
      */
-    public void setmSelectedDecks(List<Deck> mSelectedDecks) {
+    public void setmSelectedDecks(List<DeckInfo> mSelectedDecks) {
         this.mSelectedDecks = mSelectedDecks;
     }
 
