@@ -3,10 +3,12 @@ package at.fhooe.mc.android.cakespromoteobesity.lobby;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,9 +43,10 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     EditText lobbyPassword;
     Spinner dropdown_players;
     Spinner dropdown_winpoints;
-    MultiSelectionSpinner dropdown_decksOfficial;
+    MultiSelectionSpinner dropdown_decksOfficial, dropdown_decksUnofficial;
     Button startLobby;
     Lobby newLobby;
+    ProgressBar loadingBar1, loadingBar2;
 
     //List which contains all Decks with names
     private List<DeckInfo> deckInfoListOff, deckInfoListUnoff;
@@ -64,7 +67,17 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         lobbyPassword = (EditText) findViewById(R.id.et_password);
         dropdown_players = (Spinner)findViewById(R.id.spinner_players);
         dropdown_winpoints = (Spinner)findViewById(R.id.spinner_winpoints);
-        dropdown_decksOfficial = (MultiSelectionSpinner) findViewById(R.id.spinner_decks);
+
+        dropdown_decksOfficial = (MultiSelectionSpinner) findViewById(R.id.spinner_decks_off);
+        dropdown_decksUnofficial = (MultiSelectionSpinner) findViewById(R.id.spinner_decks_unoff);
+        dropdown_decksOfficial.setVisibility(View.INVISIBLE);
+        dropdown_decksUnofficial.setVisibility(View.INVISIBLE);
+
+        loadingBar1 = (ProgressBar)findViewById(R.id.progressBar_lobbyCreate_off);
+        loadingBar1.setVisibility(View.VISIBLE);
+        loadingBar2 = (ProgressBar)findViewById(R.id.progressBar_lobbyCreate_unoff);
+        loadingBar2.setVisibility(View.VISIBLE);
+
         startLobby = (Button) findViewById(R.id.btn_startLobby);
         startLobby.setOnClickListener(this);
         ArrayAdapter<String> adapter_decks;
@@ -85,6 +98,8 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         deckInfoListUnoff = new ArrayList<>();
         deckListStringUnoff = new ArrayList<>();
 
+        //deckListStringOff.add("Select some ...");
+        //deckListStringUnoff.add("Select some ...");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,7 +115,12 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                     deckInfoListUnoff.add(deckInfo);
                     deckListStringUnoff.add(deckInfo.getmDeckName());
                 }
+                dropdown_decksUnofficial.setItems(deckListStringUnoff);
 
+                loadingBar1.setVisibility(View.GONE);
+                loadingBar2.setVisibility(View.GONE);
+                dropdown_decksOfficial.setVisibility(View.VISIBLE);
+                dropdown_decksUnofficial.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -116,20 +136,32 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
             case R.id.btn_startLobby:{
                 String name = lobbyName.getText().toString();
                 String password = lobbyPassword.getText().toString();
-
                 try{
                     maxPlayer = Integer.parseInt(dropdown_players.getSelectedItem().toString());
                     winPoints = Integer.parseInt(dropdown_winpoints.getSelectedItem().toString());
                 }catch(NumberFormatException _e) {
                     _e.printStackTrace();
                 }
+
+                //Decks
+                boolean hasDecksSelected = false;
                 List<Integer> deckIndexSelected = dropdown_decksOfficial.getSelectedIndicies();
                 List<DeckInfo> selectedDeckInfos = new ArrayList<DeckInfo>();
                 for (int i = 0; i < deckIndexSelected.size(); i++) {
                     selectedDeckInfos.add(deckInfoListOff.get(deckIndexSelected.get(i)));
                 }
+                if (selectedDeckInfos.size() != 0) hasDecksSelected = true;
+                deckIndexSelected = dropdown_decksUnofficial.getSelectedIndicies();
+                for (int i = 0; i < deckIndexSelected.size(); i++) {
+                    selectedDeckInfos.add(deckInfoListUnoff.get(deckIndexSelected.get(i)));
+                }
+                if (selectedDeckInfos.size() != 0) hasDecksSelected = true;
 
-                if (selectedDeckInfos.size() != 0) {
+                if (hasDecksSelected) {
+                    for (DeckInfo info : selectedDeckInfos) {
+                        Log.i("Lobby",info.getmDeckName() + "\n");
+                    }
+
                     //Lobby Objekt
                     mUser.setmIsHost(true);
                     mUser.setmUserGameID(0);

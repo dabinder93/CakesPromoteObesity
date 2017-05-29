@@ -92,25 +92,27 @@
         android:layout_marginBottom="30dp">
 
         <TextView
-            android:text="@string/tv_txt_winpoints"
+            android:id="@+id/tv_winpoints"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_winpoints"
+            android:text="@string/tv_txt_winpoints"
             android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spinner_winpoints"
             android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
             android:spinnerMode="dropdown" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_decks_off"
@@ -119,8 +121,14 @@
             android:text="@string/tv_txt_decks_off"
             android:textSize="18sp" />
 
+        <ProgressBar
+            android:id="@+id/progressBar_lobbyCreate_off"
+            style="@android:style/Widget.Holo.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
         <at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner
-            android:id="@+id/spinner_decks"
+            android:id="@+id/spinner_decks_off"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_horizontal"
@@ -139,6 +147,22 @@
             android:layout_height="wrap_content"
             android:text="@string/tv_txt_decks_unoff"
             android:textSize="18sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_lobbyCreate_unoff"
+            style="@android:style/Widget.Holo.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <view
+            android:id="@+id/spinner_decks_unoff"
+            class="at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner"
+            id="@+id/view"
+            layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6.68" />
+
     </LinearLayout>
 
     <Button

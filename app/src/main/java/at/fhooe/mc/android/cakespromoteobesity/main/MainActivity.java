@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainRef.child("Decks").child(deckID).setValue(deck);*/
 
         //Test out new Deck -> this is working and getting used now
-        DatabaseReference testRef = FirebaseDatabase.getInstance().getReference().child("Resources-official");
+        /*DatabaseReference testRef = mainRef.child("Resources-unofficial");
         testRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //Uploads the DeckInfos into the chosen path
                 mDeckInfoList = new ArrayList<DeckInfo>();
-                DatabaseReference infoRef = FirebaseDatabase.getInstance().getReference().child("DeckInfo-official");
+                DatabaseReference infoRef = mainRef.child("DeckInfo-unofficial");
                 for (int i = 0; i < mDecksTest.size(); i++) {
                     Deck deck = mDecksTest.get(i);
                     mDeckInfoList.add(new DeckInfo(deck));
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        });*/
 
     }
 

@@ -164,7 +164,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * fetches all the Cards from online and offline and saves it in the DeckList
-     * status will than change to start the Game (with fillHands)
+     * status will then change to start the Game (with fillHands)
      */
     private void fetchCards() {
         //get all the Cards from all the Decks at once
@@ -175,15 +175,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //get the cards online
-        DatabaseReference cardRef = FirebaseDatabase.getInstance().getReference().child("Resources-official");
+        DatabaseReference cardRef = FirebaseDatabase.getInstance().getReference();//.child("Resources-official");
         cardRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i("GameActivity","cardRef");
                 //mDecksTest = new ArrayList<>();
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                for (DataSnapshot snap : dataSnapshot.child("Resources-official").getChildren()) {
                     Deck deck = snap.getValue(Deck.class);
-
                     //check if deck is checked to be used for this game
                     for (DeckInfo info : mGame.getmSelectedDecks()) {
                         if (info.getmDeckName().equals(deck.getName())) {
@@ -192,6 +191,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 }
+
+                for (DataSnapshot snap : dataSnapshot.child("Resources-unofficial").getChildren()) {
+                    Deck deck = snap.getValue(Deck.class);
+                    for (DeckInfo info : mGame.getmSelectedDecks()) {
+                        if (info.getmDeckName().equals(deck.getName())) {
+                            mDeckList.add(deck);
+                            break;
+                        }
+                    }
+                }
+
                 Log.i("Main","Count of chosen Decks: " + mDeckList.size());
                 mGame.setmGameStatus(FILL_HANDS_WITH_CARDS);
                 ref.child(mGame.getmGameKey()).setValue(mGame);
@@ -232,10 +242,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         if (randomID < info.getmWhiteCardCount()) {
                             //if random id is lower than deck size, the id belongs in this deck
                             boolean isNotUsed = true;
-                            for (int num : mCardsInUse.get(deckIndex).getmCardResponsesID()) {
-                                if (num == randomID) {
-                                    isNotUsed = false;
-                                    break;
+                            if (mCardsInUse.get(deckIndex).getmCardResponsesID().size() == mGame.getmSelectedDecks().get(deckIndex).getmWhiteCardCount()) {
+                                mCardsInUse.get(deckIndex).setmCardResponsesID(new ArrayList<Integer>());
+                                Log.i("GameActivity","Used all cards from " + mGame.getmSelectedDecks().get(deckIndex).getmDeckName() + ", resetting those cards");
+                            }else {
+                                for (int num : mCardsInUse.get(deckIndex).getmCardResponsesID()) {
+                                    if (num == randomID) {
+                                        isNotUsed = false;
+                                        break;
+                                    }
                                 }
                             }
                             if (isNotUsed) {

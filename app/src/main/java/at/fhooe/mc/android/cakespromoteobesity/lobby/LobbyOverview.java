@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -148,6 +149,9 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
             //Creates new Game Object and pushes it into Database with same GameID as LobbyID + setGameIsStarting
             //so that other Player get notification and get into new Activity
             setContentView(R.layout.activity_game_setup);
+            ProgressBar loadingBar = (ProgressBar)findViewById(R.id.progressBar_game_setup);
+            loadingBar.setVisibility(View.VISIBLE);
+
             Game game = new Game(mLobby);
             FirebaseDatabase.getInstance().getReference().child("Games").child(mLobby.getmLobbyKey()).setValue(game);
             mLobby.setmGameIsStarting(true);

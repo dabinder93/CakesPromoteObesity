@@ -38,4 +38,5 @@
         <b>Whoever reaches the defined Win Points, wins the Game!</b>
     </string>
     <string name="tv_txt_decks_unoff">Unofficial Decks:</string>
+    <string name="list_no_selected">Select some ...</string>
 </resources>
