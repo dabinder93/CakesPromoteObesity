@@ -79,22 +79,16 @@ public class LobbyListAdapter extends RecyclerView.Adapter<LobbyListAdapter.View
     public void onBindViewHolder(LobbyListAdapter.ViewHolder _holder, final int _position) {
         final Lobby lobby = mLobbyList.get(_position);
 
-        TextView textView = _holder.tv_lobbyName;
-        textView.setText(lobby.getmName());
+        _holder.tv_lobbyName.setText(lobby.getmName());
+        _holder.tv_lobbyHost.setText(lobby.getmUserList().get(0));
+        _holder.tv_lobbyPlayers.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
 
-        textView = _holder.tv_lobbyHost;
-        textView.setText(lobby.getmUserList().get(0));
-
-        textView = _holder.tv_lobbyPlayers;
-        textView.setText(String.valueOf(lobby.getmUsersInLobby()) + "/" + String.valueOf(lobby.getmMaxPlayers()));
-
-        textView = _holder.tv_lobbyDeckList;
         StringBuffer b = new StringBuffer(" ");
         for (int i = 0; i < lobby.getmDecks().size(); i++) {
             b.append(lobby.getmDecks().get(i).getmDeckName());
             if (i != lobby.getmDecks().size()-1) b.append(", ");
         }
-        textView.setText(b.toString());
+        _holder.tv_lobbyDeckList.setText(b.toString());
 
         if (!lobby.getmPassword().equals("")) _holder.imgView_pw.setVisibility(View.VISIBLE);
         else _holder.imgView_pw.setVisibility(View.GONE);

@@ -145,7 +145,7 @@ public class LobbyOverview extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View _view) {
         //Start the Game if there are 3 or more Users in the Lobby -> changed to 2 for testing purposes
-        if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && mLobby.getmUsersInLobby() > 1) {
+        if (_view.getId() == R.id.btn_lobbyOV_startGame && mUser.isHost() && mLobby.getmUsersInLobby() >= 1) {
             //Creates new Game Object and pushes it into Database with same GameID as LobbyID + setGameIsStarting
             //so that other Player get notification and get into new Activity
             setContentView(R.layout.activity_game_setup);

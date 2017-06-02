@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/activity_game"
@@ -11,6 +12,55 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="at.fhooe.mc.android.cakespromoteobesity.game.GameActivity"
     android:background="@android:color/background_light">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@android:color/black"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:id="@+id/tv_game_prompt_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="TextView"
+            android:textColor="@android:color/white"
+            android:layout_toStartOf="@+id/iv_game_prompt_icon" />
+
+        <TextView
+            android:id="@+id/tv_game_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_game_prompt_id"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="sans-serif"
+            android:text="TextView"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_game_prompt_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@color/authui_colorActivated"
+            android:layout_above="@+id/tv_game_prompt" />
+
+        <TextView
+            android:id="@+id/tv_game_prompt_pick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="25dp"
+            android:textColor="@android:color/white"
+            android:text="TextView" />
+
+    </RelativeLayout>
 
     <TextView
         android:text="TextView"
@@ -33,30 +83,20 @@
         android:textSize="18sp"
         android:layout_marginTop="5dp" />
 
-    <ListView
-        android:id="@+id/listView_game_responses"
-        style="@style/Widget.AppCompat.ListView"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tv_game_status"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_game_prompt"
-        android:layout_toStartOf="@+id/listView_game_score"
-        android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray" />
-
-    <TextView
-        android:text="TextView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recView_game_answers"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/tv_game_prompt"
-        android:fontFamily="sans-serif"
-        android:textSize="18sp"
-        android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:textStyle="normal|bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_toStartOf="@+id/listView_game_score" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recView_game_responses"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/tv_game_status" />
 
     <ListView
         android:layout_height="match_parent"
@@ -64,7 +104,7 @@
         android:layout_marginLeft="5dp"
         android:layout_width="120dp"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tv_game_prompt"
-        android:layout_above="@+id/tv_game_status" />
+        android:layout_above="@+id/recView_game_responses"
+        android:layout_below="@+id/relativeLayout" />
 
 </RelativeLayout>

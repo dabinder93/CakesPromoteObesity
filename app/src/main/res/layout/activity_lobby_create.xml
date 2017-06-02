@@ -139,6 +139,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:orientation="horizontal">
 
         <TextView
@@ -164,6 +165,14 @@
             android:layout_weight="6.68" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cardSum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView"
+        android:textSize="18sp" />
 
     <Button
         android:text="@string/btn_txt_startLobby"

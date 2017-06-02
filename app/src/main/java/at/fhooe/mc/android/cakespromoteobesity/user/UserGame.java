@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import at.fhooe.mc.android.cakespromoteobesity.card.Response;
+
 /**
  * UserGame is a special User type which gets saved in a Game Object (as a whole List of all Users)
  * it has specific variables in use like the Cards in the User's hand or his/her points.
@@ -13,7 +15,7 @@ public class UserGame implements Serializable {
 
     private String mName;
     private int mCardCount;
-    private List<String> mCardsInHand;
+    private List<Response> mCardsInHand;
     private int mPoints;
 
     //Firebase
@@ -30,7 +32,7 @@ public class UserGame implements Serializable {
      * Adds a card to the Users Hand List
      * @param cardText String of the card the User gets in his Hand
      */
-    public void addCardToHand(String cardText) {
+    public void addCardToHand(Response cardText) {
         if (mCardsInHand == null) mCardsInHand = new ArrayList<>();
             mCardsInHand.add(cardText);
     }
@@ -40,10 +42,10 @@ public class UserGame implements Serializable {
      * @param _cardText String of card that should be removed
      */
     public void removeCardFromHand(String _cardText){
-        Iterator<String> iterator = mCardsInHand.iterator();
+        Iterator<Response> iterator = mCardsInHand.iterator();
         while(iterator.hasNext()){
-            String s = iterator.next();
-            if(s.equals(_cardText)){
+            Response s = iterator.next();
+            if(s.getText().equals(_cardText)){
                 iterator.remove();
                 break;
             }
@@ -86,7 +88,7 @@ public class UserGame implements Serializable {
      * returns the list of cards in a user's hand
      * @return List<String> cards in a user's hand
      */
-    public List<String> getmCardsInHand() {
+    public List<Response> getmCardsInHand() {
         return mCardsInHand;
     }
 
@@ -94,7 +96,7 @@ public class UserGame implements Serializable {
      * sets a list of cards in a user's hand
      * @param mCardsInHand List<String> of cards of the user's new hand
      */
-    public void setmCardsInHand(List<String> mCardsInHand) {
+    public void setmCardsInHand(List<Response> mCardsInHand) {
         this.mCardsInHand = mCardsInHand;
     }
 

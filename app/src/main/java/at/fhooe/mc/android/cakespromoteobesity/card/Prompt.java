@@ -6,7 +6,21 @@ package at.fhooe.mc.android.cakespromoteobesity.card;
 
 public class Prompt {
     private String text;
+    private String id;
     private int pick;
+
+    //Firebase
+    public Prompt() {
+        text = "_____";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getText() {
         return text;

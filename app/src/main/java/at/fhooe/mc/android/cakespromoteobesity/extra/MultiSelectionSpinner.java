@@ -18,10 +18,17 @@ public class MultiSelectionSpinner extends Spinner implements
         DialogInterface.OnMultiChoiceClickListener
 {
     String[] allItems = null;
-    String[] newItems = null;
     boolean[] mSelection = null;
-
     ArrayAdapter<String> simple_adapter;
+    private onSpinnerSelectedItemsListener mItemSelectedListener;
+
+    public void setSpinnerSelectedItemsListner(onSpinnerSelectedItemsListener mItemSelectedListener) {
+        this.mItemSelectedListener = mItemSelectedListener;
+    }
+
+    public interface onSpinnerSelectedItemsListener {
+        void updateSelectedIndices(List<Integer> indices);
+    }
 
     public MultiSelectionSpinner(Context context)
     {
@@ -65,7 +72,8 @@ public class MultiSelectionSpinner extends Spinner implements
             @Override
             public void onClick(DialogInterface arg0, int arg1)
             {
-
+               //Update the cardSum here
+                mItemSelectedListener.updateSelectedIndices(getSelectedIndicies());
             }
         });
 
@@ -93,7 +101,7 @@ public class MultiSelectionSpinner extends Spinner implements
         mSelection = new boolean[allItems.length];
         simple_adapter.clear();
         //simple_adapter.add(allItems[0]);
-        simple_adapter.add("None selected ...");
+        simple_adapter.add("0 selected ...");
         Arrays.fill(mSelection, false);
     }
 
@@ -195,8 +203,10 @@ public class MultiSelectionSpinner extends Spinner implements
                 sb.append(allItems[i]);
             }
         }
-        if (foundOne) return sb.toString();
-        else return "None selected ...";
+
+        return String.valueOf(getSelectedIndicies().size()) + " selected ...";
+        //if (foundOne) return sb.toString();
+        //else return "None selected ...";
     }
 
     public String getSelectedItemsAsString() {
@@ -214,7 +224,4 @@ public class MultiSelectionSpinner extends Spinner implements
         }
         return sb.toString();
     }
-
-
-
 }
