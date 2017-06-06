@@ -764,6 +764,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
             mAnswersView.setVisibility(View.VISIBLE);
+            //blabla
 
         }
     }
