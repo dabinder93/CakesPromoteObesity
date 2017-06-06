@@ -16,6 +16,7 @@ public class UserGame implements Serializable {
     private String mName;
     private int mCardCount;
     private List<Response> mCardsInHand;
+    private List<Response> mSelectedCards;
     private int mPoints;
 
     //Firebase
@@ -39,17 +40,22 @@ public class UserGame implements Serializable {
 
     /**
      * Iterates throught the User's Cards List and removes the card with the same text as the parameter
-     * @param _cardText String of card that should be removed
+     * @param _resp String of card that should be removed
      */
-    public void removeCardFromHand(String _cardText){
+    public void removeCardFromHand(Response _resp){
         Iterator<Response> iterator = mCardsInHand.iterator();
         while(iterator.hasNext()){
             Response s = iterator.next();
-            if(s.getText().equals(_cardText)){
+            if(s.getText().equals(_resp.getText())){
                 iterator.remove();
                 break;
             }
         }
+    }
+
+    public void addCardToSelected(Response cardText) {
+        if (mSelectedCards == null) mSelectedCards = new ArrayList<>();
+        mSelectedCards.add(cardText);
     }
 
     /**
@@ -116,6 +122,14 @@ public class UserGame implements Serializable {
         this.mPoints = mPoints;
     }
 
+    public List<Response> getmSelectedCards() {
+        return mSelectedCards;
+    }
+
+    public void setmSelectedCards(List<Response> mSelectedCards) {
+        this.mSelectedCards = mSelectedCards;
+    }
+
     /**
      * returns a String for the scoreboard-listview
      * @return String for listview
@@ -124,4 +138,5 @@ public class UserGame implements Serializable {
     public String toString() {
         return mName + "\n \t" + mPoints;
     }
+
 }

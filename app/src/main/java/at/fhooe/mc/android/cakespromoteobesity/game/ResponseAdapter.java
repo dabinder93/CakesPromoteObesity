@@ -12,19 +12,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
-import at.fhooe.mc.android.cakespromoteobesity.card.ResponseWithUser;
+import at.fhooe.mc.android.cakespromoteobesity.card.Response;
 
 /**
  * Created by Bastian on 29.05.2017.
  */
 
-public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapter.ViewHolder> {
+public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
 
-    private List<ResponseWithUser> mItemList;
+    private List<Response> mItemList;
     private Context mContext;
     private onRecyclerViewItemClickListener mItemClickListener;
     private int selectedItem = 0;
-    private int selectedUserID = 0;
 
     public void setOnItemClickListener(onRecyclerViewItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
@@ -35,10 +34,9 @@ public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapte
     }
 
 
-    public ResponseListAdapter(Context _context, final List<ResponseWithUser> _obj) {
+    public ResponseAdapter(Context _context, final List<Response> _obj) {
         mItemList = _obj;
         mContext = _context;
-        selectedUserID = mItemList.get(0).getUserID();
     }
 
 
@@ -67,9 +65,17 @@ public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapte
                     //Log.i("GameActivity","OnClick, Pos: " + getAdapterPosition());
                     if (mItemClickListener != null) {
                         selectedItem = getAdapterPosition();
-                        selectedUserID = mItemList.get(getAdapterPosition()).getUserID();
-                        mItemClickListener.onItemClickListener(_view, selectedUserID);
+                        mItemClickListener.onItemClickListener(_view, getAdapterPosition());
                         notifyDataSetChanged();
+                        //Somehow not working
+                        /*for (int i = 0; i < mItemList.size(); i++) {
+                            if (i == selectedItem) {
+                                _itemView.setBackgroundColor(Color.RED);
+                                Log.i("GameActivity","Red on: " + selectedItem);
+                            }
+                            else _itemView.setBackgroundColor(Color.TRANSPARENT);
+                        }*/
+                        //_itemView.setBackgroundColor(Color.RED);
                         _itemView.setSelected(true);
                     }
                 }
@@ -79,7 +85,7 @@ public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapte
     }
 
     @Override
-    public ResponseListAdapter.ViewHolder onCreateViewHolder(ViewGroup _parent, int _viewType) {
+    public ResponseAdapter.ViewHolder onCreateViewHolder(ViewGroup _parent, int _viewType) {
         LayoutInflater inflater = LayoutInflater.from(_parent.getContext());
 
         View lobbyListView = inflater.inflate(R.layout.activity_game_response_item,_parent,false);
@@ -89,25 +95,30 @@ public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapte
     }
 
     @Override
-    public void onBindViewHolder(ResponseListAdapter.ViewHolder _holder, int _position) {
-        _holder.tv_response.setText(mItemList.get(_position).getResponse().getText());
-        _holder.tv_id.setText(mItemList.get(_position).getResponse().getId());
+    public void onBindViewHolder(ResponseAdapter.ViewHolder _holder, int _position) {
+        //_holder.recV_responses.setText(mItemList.get(_position));
+        _holder.tv_response.setText(mItemList.get(_position).getText());
+        _holder.tv_id.setText(mItemList.get(_position).getId());
 
         for (int i = 0; i < mItemList.size(); i++) {
-            if (mItemList.get(i).getUserID() == selectedUserID) {
+            if (i == selectedItem) {
+                //_holder.itemView.setBackgroundColor(Color.RED);
                 _holder.itemView.setSelected(true);
-                _holder.itemView.setBackgroundColor(Color.RED);
                 //Log.i("GameActivity","Red on: " + selectedItem);
             }
             else {
+                //_holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 _holder.itemView.setSelected(false);
-                _holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
         }
 
         //Following is working ->notify
-        //if (selectedItem == _position) _holder.itemView.setBackgroundColor(Color.RED);
-        //else _holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        if (selectedItem == _position) _holder.itemView.setBackgroundColor(Color.RED);
+        else _holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+
+
+
+        //_holder.itemView.setSelected(selectedItem == _position);
     }
 
     @Override
