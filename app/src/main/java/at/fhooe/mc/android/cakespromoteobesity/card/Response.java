@@ -1,10 +1,12 @@
 package at.fhooe.mc.android.cakespromoteobesity.card;
 
+import java.io.Serializable;
+
 /**
  * Created by Bastian on 28.04.2017.
  */
 
-public class Response {
+public class Response implements Serializable {
     String text;
     String id;
 

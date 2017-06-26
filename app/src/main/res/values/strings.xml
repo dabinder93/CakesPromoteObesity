@@ -39,4 +39,6 @@
     </string>
     <string name="tv_txt_decks_unoff">Unofficial Decks:</string>
     <string name="list_no_selected">Select some ...</string>
+    <string name="btn_main_customize">Custom decks</string>
+    <string name="btn_custom_explorer">Deck Explorer</string>
 </resources>

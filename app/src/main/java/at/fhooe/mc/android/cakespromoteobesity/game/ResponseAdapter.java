@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,13 +19,14 @@ import at.fhooe.mc.android.cakespromoteobesity.card.Response;
 /**
  * Created by Bastian on 29.05.2017.
  */
-
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
 
     private List<Response> mItemList;
     private Context mContext;
     private onRecyclerViewItemClickListener mItemClickListener;
     private int selectedItem = 0;
+    private int lastPosition = -1;
+    private boolean animationFromBottom;
 
     public void setOnItemClickListener(onRecyclerViewItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
@@ -34,9 +37,10 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     }
 
 
-    public ResponseAdapter(Context _context, final List<Response> _obj) {
+    public ResponseAdapter(Context _context, final List<Response> _obj, boolean _b) {
         mItemList = _obj;
         mContext = _context;
+        animationFromBottom = _b;
     }
 
 
@@ -112,17 +116,41 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
             }
         }
 
+        setAnimation(_holder.itemView, _position);
+
         //Following is working ->notify
-        if (selectedItem == _position) _holder.itemView.setBackgroundColor(Color.RED);
-        else _holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-
-
-
-        //_holder.itemView.setSelected(selectedItem == _position);
+        if (selectedItem == _position) {
+            _holder.itemView.setBackgroundResource(R.drawable.border_selected); //View gets border, not the layout-xml used
+        }
+        else {
+            _holder.itemView.setBackgroundResource(0);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mItemList.size();
+    }
+
+    private void setAnimation(View _view, int _position) {
+        if (_position > lastPosition) {
+            _view.animate().cancel();
+            //if (animationFromBottom) _view.setTranslationY(300);
+            _view.setTranslationY(-300);
+            //_view.setTranslationX(300);
+            _view.setAlpha(0);
+            _view.animate().alpha(1.0f).translationY(0).translationX(0).setDuration(300);//.setStartDelay(_position*100);
+            lastPosition++;
+        }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
     }
 }

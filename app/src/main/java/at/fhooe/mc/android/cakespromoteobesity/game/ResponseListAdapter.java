@@ -1,7 +1,6 @@
 package at.fhooe.mc.android.cakespromoteobesity.game;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,12 +95,12 @@ public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapte
         for (int i = 0; i < mItemList.size(); i++) {
             if (mItemList.get(i).getUserID() == selectedUserID) {
                 _holder.itemView.setSelected(true);
-                _holder.itemView.setBackgroundColor(Color.RED);
+                _holder.itemView.setBackgroundResource(R.drawable.border_selected);
                 //Log.i("GameActivity","Red on: " + selectedItem);
             }
             else {
                 _holder.itemView.setSelected(false);
-                _holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                _holder.itemView.setBackgroundResource(0);
             }
         }
 

@@ -23,6 +23,7 @@ import java.util.Collections;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.card.DeckInfo;
+import at.fhooe.mc.android.cakespromoteobesity.customize.CustomizeActivity;
 import at.fhooe.mc.android.cakespromoteobesity.extra.RulesActivity;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.JoinLobby;
 import at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby;
@@ -33,7 +34,7 @@ import at.fhooe.mc.android.cakespromoteobesity.user.User;
  * and the Option to enter a User Name for the Game.
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private Button mJoinLobby, mCreateLobby;
+    private Button mJoinLobby, mCreateLobby, mCustomDecks;
     private EditText et_playerName;
     public static User mUser;
     public static String mUserKey;
@@ -54,8 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mCreateLobby = (Button) findViewById(R.id.btn_createLobby);
         mJoinLobby = (Button) findViewById(R.id.btn_joinLobby);
+        mCustomDecks = (Button) findViewById(R.id.btn_customize);
         mCreateLobby.setOnClickListener(this);
         mJoinLobby.setOnClickListener(this);
+        mCustomDecks.setOnClickListener(this);
         et_playerName = (EditText) findViewById(R.id.et_playerName);
 
         //Get a deck into Decks-Branch
@@ -131,8 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     startActivity(i);
                 }
-            }
-            break;
+            }break;
             case R.id.btn_joinLobby: {
                 i = new Intent(this, JoinLobby.class);
                 //If the user hasn't made an User-Object yet, it gets created and pushed to Firebase
@@ -149,8 +151,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     startActivity(i);
                 }
-            }
-            break;
+            }break;
+            case R.id.btn_customize: {
+                i = new Intent(this, CustomizeActivity.class);
+                //If the user hasn't made an User-Object yet, it gets created and pushed to Firebase
+                if (mUser == null) {
+                    mPlayerName = et_playerName.getText().toString();
+                    if(mPlayerName.length() < 4){
+                        Toast.makeText(this, "Your user name must have at least 4 letters", Toast.LENGTH_SHORT).show();
+                    }else{
+                        mUserKey = usersRef.push().getKey();
+                        mUser = new User(mPlayerName,mUserKey);
+                        usersRef.child(mUserKey).setValue(mUser);
+                        startActivity(i);
+                    }
+                }else{
+                    startActivity(i);
+                }
+            }break;
             default: {
                 Toast.makeText(this, "Error on onClick", Toast.LENGTH_SHORT).show();
             }
