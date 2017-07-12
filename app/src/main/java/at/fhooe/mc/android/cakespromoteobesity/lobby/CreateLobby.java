@@ -1,6 +1,8 @@
 package at.fhooe.mc.android.cakespromoteobesity.lobby;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,11 +21,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import at.fhooe.mc.android.cakespromoteobesity.card.Deck;
 import at.fhooe.mc.android.cakespromoteobesity.card.DeckInfo;
 import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner;
@@ -46,7 +53,7 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     EditText lobbyPassword;
     Spinner dropdown_players;
     Spinner dropdown_winpoints;
-    MultiSelectionSpinner dropdown_decksOfficial, dropdown_decksUnofficial;
+    MultiSelectionSpinner dropdown_decksOfficial, dropdown_decksUnofficial, dropdown_decksCustom;
     Button startLobby;
     Lobby newLobby;
     ProgressBar loadingBar1, loadingBar2;
@@ -56,10 +63,10 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
     int potentialRoundsPlayed;
 
     //List which contains all Decks with names
-    private List<DeckInfo> deckInfoListOff, deckInfoListUnoff;
+    private List<DeckInfo> deckInfoListOff, deckInfoListUnoff, deckInfoListCustom;
 
     //List which contains the NAMES of the Decks (not ID)
-    private List<String> deckListStringOff, deckListStringUnoff;
+    private List<String> deckListStringOff, deckListStringUnoff, deckListStringCustom;
     String mLobbyKey;
     User mUser = MainActivity.mUser;
     int maxPlayer,winPoints;
@@ -76,12 +83,14 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         dropdown_winpoints = (Spinner)findViewById(R.id.spinner_winpoints);
 
         cardSumText = (TextView)findViewById(R.id.tv_cardSum);
+        cardSumText.setVisibility(View.GONE);
         promptSumOff = promptSumUnoff = promptSumCustom = responseSumOff = responseSumUnoff = responseSumCustom = 0;
 
         dropdown_decksOfficial = (MultiSelectionSpinner) findViewById(R.id.spinner_decks_off);
         dropdown_decksUnofficial = (MultiSelectionSpinner) findViewById(R.id.spinner_decks_unoff);
         dropdown_decksOfficial.setVisibility(View.INVISIBLE);
         dropdown_decksUnofficial.setVisibility(View.INVISIBLE);
+        dropdown_decksCustom = (MultiSelectionSpinner)findViewById(R.id.spinner_decks_custom);
 
         loadingBar1 = (ProgressBar)findViewById(R.id.progressBar_lobbyCreate_off);
         loadingBar1.setVisibility(View.VISIBLE);
@@ -132,11 +141,49 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
         deckListStringOff = new ArrayList<>();
         deckInfoListUnoff = new ArrayList<>();
         deckListStringUnoff = new ArrayList<>();
+        deckInfoListCustom = new ArrayList<>();
+        deckListStringCustom = new ArrayList<>();
         updateSelectedCards();
-
         //deckListStringOff.add("Select some ...");
         //deckListStringUnoff.add("Select some ...");
 
+        //get the local decks
+        List<Deck> mCustomDecks;
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = mPrefs.getString("Decks", "");
+        if (json.isEmpty()) {
+            mCustomDecks = new ArrayList<Deck>();
+        } else {
+            Type type = new TypeToken<List<Deck>>() {}.getType();
+            mCustomDecks = gson.fromJson(json, type);
+        }
+        LinearLayout layoutCustom = (LinearLayout)findViewById(R.id.layout_decks_custom);
+        if (mCustomDecks == null || mCustomDecks.size() == 0) {
+            //no decks saved, invisible
+            layoutCustom.setVisibility(View.GONE);
+        }else {
+            //decks found
+            layoutCustom.setVisibility(View.VISIBLE);
+            for (Deck deck : mCustomDecks) {
+                deckInfoListCustom.add(new DeckInfo(deck));
+                deckListStringCustom.add(deck.getName());
+            }
+            dropdown_decksCustom.setItems(deckListStringCustom);
+            dropdown_decksCustom.setSpinnerSelectedItemsListner(new MultiSelectionSpinner.onSpinnerSelectedItemsListener() {
+                @Override
+                public void updateSelectedIndices(List<Integer> _indices) {
+                    promptSumCustom = responseSumCustom = 0;
+                    for (int i : _indices) {
+                        promptSumCustom += deckInfoListCustom.get(i).getmBlackCardCount();
+                        responseSumCustom += deckInfoListCustom.get(i).getmWhiteCardCount();
+                        updateSelectedCards();
+                    }
+                }
+            });
+        }
+
+        //get the online decks
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,11 +228,10 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                 dropdown_decksOfficial.setVisibility(View.VISIBLE);
                 dropdown_decksUnofficial.setVisibility(View.VISIBLE);
                 startLobby.setVisibility(View.VISIBLE);
+                cardSumText.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -213,11 +259,20 @@ public class CreateLobby extends AppCompatActivity implements View.OnClickListen
                     selectedDeckInfos.add(deckInfoListOff.get(deckIndexSelected.get(i)));
                 }
                 if (selectedDeckInfos.size() != 0) hasDecksSelected = true;
+
                 deckIndexSelected = dropdown_decksUnofficial.getSelectedIndicies();
                 for (int i = 0; i < deckIndexSelected.size(); i++) {
                     selectedDeckInfos.add(deckInfoListUnoff.get(deckIndexSelected.get(i)));
                 }
                 if (selectedDeckInfos.size() != 0) hasDecksSelected = true;
+
+                if (deckInfoListCustom.size() != 0) {
+                    deckIndexSelected = dropdown_decksCustom.getSelectedIndicies();
+                    for (int i = 0; i < deckIndexSelected.size(); i++) {
+                        selectedDeckInfos.add(deckInfoListCustom.get(deckIndexSelected.get(i)));
+                    }
+                    if (selectedDeckInfos.size() != 0) hasDecksSelected = true;
+                }
 
                 if (hasDecksSelected) {
                     for (DeckInfo info : selectedDeckInfos) {

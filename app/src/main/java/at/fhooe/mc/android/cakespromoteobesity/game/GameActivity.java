@@ -1,6 +1,8 @@
 package at.fhooe.mc.android.cakespromoteobesity.game;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,8 +25,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +45,7 @@ import at.fhooe.mc.android.cakespromoteobesity.card.Prompt;
 import at.fhooe.mc.android.cakespromoteobesity.card.Response;
 import at.fhooe.mc.android.cakespromoteobesity.card.ResponseWithUser;
 import at.fhooe.mc.android.cakespromoteobesity.card.ResponseWithUserList;
+import at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner;
 import at.fhooe.mc.android.cakespromoteobesity.main.MainActivity;
 import at.fhooe.mc.android.cakespromoteobesity.user.User;
 import at.fhooe.mc.android.cakespromoteobesity.user.UserGame;
@@ -172,6 +179,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         checkPointsForRound();
                     }break;
                     case DISCONNECT_FROM_GAME: {
+                        countdownValPlayer = 1;
+                        countDownValCzar = 1;
                         disconnectFromGame();
                     }break;
                     default : {
@@ -193,6 +202,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         //get all the Cards from all the Decks at once
         Log.i("GameActivity","Entered fetchCards");
         mDeckList = new ArrayList<>();
+
+        //get the cards offline from the user
+        List<Deck> mCustomDecks;
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = mPrefs.getString("Decks", "");
+        if (json.isEmpty()) {
+            mCustomDecks = new ArrayList<Deck>();
+        } else {
+            Type type = new TypeToken<List<Deck>>() {}.getType();
+            mCustomDecks = gson.fromJson(json, type);
+        }
+        if (mCustomDecks.size() != 0) {
+            //decks found
+            for (Deck deck : mCustomDecks) {
+                for (DeckInfo info : mGame.getmSelectedDecks()) {
+                    if (info.getmDeckName().equals(deck.getName()) && info.getmBlackCardCount() == deck.getPrompts().size() && info.getmWhiteCardCount() == deck.getResponses().size()) {
+                        mDeckList.add(deck);
+                        break;
+                    }
+                }
+            }
+        }
 
         //get the cards online
         DatabaseReference cardRef = FirebaseDatabase.getInstance().getReference();//.child("Resources-official");
@@ -223,10 +255,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 Collections.sort(mDeckList);
 
-                //get the cards offline from the user
-
-
-
                 Log.i("Main","Count of chosen Decks: " + mDeckList.size());
                 mGame.setmGameStatus(FILL_HANDS_WITH_CARDS);
                 ref.child(mGame.getmGameKey()).setValue(mGame);
@@ -251,7 +279,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("GameActivity" ,"Deck Name = " + deck.getName());
         }
 
-        int testLoop = 1;
         for (int userIndex = 0; userIndex < mGame.getmUsersInGame(); userIndex++) {
             //for every User
             int cardsHand;
@@ -272,7 +299,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             boolean isNotUsed = true;
                             if (mCardsInUse.get(deckIndex).getmCardResponsesID().size() == mGame.getmSelectedDecks().get(deckIndex).getmWhiteCardCount()) {
                                 mCardsInUse.get(deckIndex).setmCardResponsesID(new ArrayList<Integer>());
-                                Log.i("GameActivity","Used all cards from " + mGame.getmSelectedDecks().get(deckIndex).getmDeckName() + ", resetting those cards");
+                                Log.i("GameActivity","Used all responses from " + mGame.getmSelectedDecks().get(deckIndex).getmDeckName() + ", resetting those cards");
                             }else {
                                 for (int num : mCardsInUse.get(deckIndex).getmCardResponsesID()) {
                                     if (num == randomID) {
@@ -283,8 +310,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             if (isNotUsed) {
                                 //Card not used, can be added to the users hand
-                                Log.i("GameActivity","Random ID is not used yet, #" + testLoop + " - random = " + randomID + ", responseCount = " + info.getmWhiteCardCount());
-                                testLoop++;
+                                Log.i("GameActivity","Random ID is not used yet - random = " + randomID + ", responseCount = " + info.getmWhiteCardCount());
 
                                 if (mCardsInUse.get(deckIndex).getmCardResponsesID() == null) mCardsInUse.get(deckIndex).setmCardResponsesID(new ArrayList<Integer>());
                                 mCardsInUse.get(deckIndex).addCardToResponses(randomID);
@@ -307,7 +333,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Fetches the Prompt which should be displayed to all users, from the database
-     * After the card got Fetched, the Gamestatus will change to setUpView, so that the game can continue
+     * After the card got Fetched, the Gamestatus will change to setUpView
      */
     private void getPrompt() {
         boolean newCardNotFound = true;
@@ -321,10 +347,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if (randomID < info.getmBlackCardCount()) {
                     //if random id is lower than deck size, the id belongs in this deck
                     boolean isNotUsed = true;
-                    for (int num : mCardsInUse.get(deckIndex).getmCardPromptsID()) {
-                        if (num == randomID) {
-                            isNotUsed = false;
-                            break;
+
+                    if (mCardsInUse.get(deckIndex).getmCardPromptsID().size() == mGame.getmSelectedDecks().get(deckIndex).getmBlackCardCount()) {
+                        mCardsInUse.get(deckIndex).setmCardPromptsID(new ArrayList<Integer>());
+                        Log.i("GameActivity","Used all prompts from " + mGame.getmSelectedDecks().get(deckIndex).getmDeckName() + ", resetting those cards");
+                    }else {
+                        for (int num : mCardsInUse.get(deckIndex).getmCardPromptsID()) {
+                            if (num == randomID) {
+                                isNotUsed = false;
+                                break;
+                            }
                         }
                     }
                     if (isNotUsed) {
@@ -355,7 +387,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Sets up the ContentView, gets called once at the beginning round
+     * Sets up the ContentView, then changes to the playersChooseCard state
      */
     private void setUpView() {
         setContentView(R.layout.activity_game);
@@ -486,6 +518,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         timer.scheduleAtFixedRate(task,0,1000);
     }
 
+    /**
+     * the host will check if all user have logged in an answer
+     * if yes the game will immediately change to czarChoosesCard
+     */
     private void checkAnswers() {
         boolean allPeopleAnswered = true;
         for (int i = 0; i < mGame.getmUserGameList().size(); i++) {
@@ -706,7 +742,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * create item in taskbar
      * @param menu
-     * @return
+     * @return super method return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -718,7 +754,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //Confirm selected answer
+    /**
+     * confirms the selected answer from an user
+     * @param item
+     * @return super method return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -781,7 +821,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
+    /*
      * on listview item click
      * @param adapterView
      * @param view

@@ -14,9 +14,8 @@ import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.ResponseWithUser;
 
 /**
- * Created by Bastian on 29.05.2017.
+ * Custom Adapter to show the answers from all the users
  */
-
 public class ResponseListAdapter extends RecyclerView.Adapter<ResponseListAdapter.ViewHolder> {
 
     private List<ResponseWithUser> mItemList;

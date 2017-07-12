@@ -16,6 +16,10 @@ public class DeckGame implements Serializable {
     //Firebase
     public DeckGame() {}
 
+    /**
+     * default constructor
+     * @param _deckName
+     */
     public DeckGame(String _deckName) {
         mDeckName = _deckName;
         mCardPromptsID = new ArrayList<>();

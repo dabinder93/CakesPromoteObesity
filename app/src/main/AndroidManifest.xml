@@ -44,7 +44,9 @@
             android:name=".extra.RulesActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".customize.CustomizeActivity"></activity>
+        <activity android:name=".customize.CustomizeActivity" />
+        <activity android:name=".customize.DeckExplorer" />
+        <activity android:name=".customize.CustomizeDeck"></activity>
     </application>
 
 </manifest>

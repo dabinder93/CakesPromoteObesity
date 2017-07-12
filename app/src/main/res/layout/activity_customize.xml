@@ -11,11 +11,43 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/btn_joinLobby"
         android:background="@drawable/border"
+        android:padding="5dp"
         android:text="@string/btn_custom_explorer"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btn_custom_new"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/border"
+        android:padding="5dp"
+        android:text="@string/btn_custom_new"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recView_custom_deckList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_custom_new"
+        android:layout_below="@+id/btn_custom_explorer" />
+
+    <ListView
+        android:id="@+id/listView_custom_deckList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_custom_new"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btn_custom_explorer" />
+
 </android.widget.RelativeLayout>

@@ -91,6 +91,4 @@ public class JoinLobby extends AppCompatActivity {
         super.onDestroy();
         mAdapter = null;
     }
-
-
 }

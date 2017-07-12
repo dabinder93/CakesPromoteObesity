@@ -17,7 +17,7 @@ import at.fhooe.mc.android.cakespromoteobesity.R;
 import at.fhooe.mc.android.cakespromoteobesity.card.Response;
 
 /**
- * Created by Bastian on 29.05.2017.
+ * Custom Adapter to show the hand of a user
  */
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
 

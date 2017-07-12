@@ -41,4 +41,11 @@
     <string name="list_no_selected">Select some ...</string>
     <string name="btn_main_customize">Custom decks</string>
     <string name="btn_custom_explorer">Deck Explorer</string>
+    <string name="btn_custom_new">Create a new Deck</string>
+    <string name="btn_custom_save">Save the Deck</string>
+    <string name="tv_custom_name">Deck Name:</string>
+    <string name="tv_custom_id">Short:</string>
+    <string name="tv_custom_prompts">Prompts:</string>
+    <string name="tv_custom_responses">Responses:</string>
+    <string name="tv_txt_decks_custom">Local Decks:</string>
 </resources>

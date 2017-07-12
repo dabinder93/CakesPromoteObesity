@@ -1,186 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:id="@+id/activity_create_lobby"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context="at.fhooe.mc.android.cakespromoteobesity.lobby.CreateLobby">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="425dp"
+        android:layout_weight="0.63"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true">
 
-        <TextView
-            android:text="@string/tv_txt_lobbyname"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_name"
-            android:layout_weight="1"
-            android:textSize="18sp" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/et_name"
-            android:hint="Name"
-            android:gravity="center_horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp">
-
-        <TextView
-            android:text="@string/tv_txt_lobbyPassword"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_password"
-            android:layout_weight="1"
-            android:textSize="18sp" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/et_password"
-            android:hint="Password"
-            android:gravity="center_horizontal" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_width="match_parent"
-        android:layout_marginBottom="30dp">
-
-        <TextView
-            android:text="@string/tv_txt_players"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_players"
-            android:gravity="center_vertical"
-            android:layout_width="140dp"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/spinner_players"
+        <LinearLayout
+            android:id="@+id/layout_decks_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            android:gravity="right|start"
-            android:layout_marginLeft="15dp" />
-    </LinearLayout>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingEnd="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tv_txt_lobbyname"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_winpoints"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_txt_winpoints"
-            android:textSize="18sp" />
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="Name"
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner_winpoints"
+        <LinearLayout
+            android:id="@+id/layout_decks_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="1"
-            android:spinnerMode="dropdown" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/layout_decks_name"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="9dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_password"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tv_txt_lobbyPassword"
+                android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="horizontal">
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="Password"
+                android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/tv_decks_off"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_txt_decks_off"
-            android:textSize="18sp" />
+        </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar_lobbyCreate_off"
-            style="@android:style/Widget.Holo.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-        <at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner
-            android:id="@+id/spinner_decks_off"
+        <LinearLayout
+            android:id="@+id/layout_decks_max_players"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center_horizontal"
-            android:gravity="right" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/layout_decks_pw"
+            android:orientation="horizontal"
+            tools:layout_width="match_parent">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_players"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/tv_txt_players"
+                android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/spinner_players"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="right|start"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_decks_unoff"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_txt_decks_unoff"
-            android:textSize="18sp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar_lobbyCreate_unoff"
-            style="@android:style/Widget.Holo.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-        <view
-            android:id="@+id/spinner_decks_unoff"
-            class="at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner"
-            id="@+id/view"
-            layout_weight="1"
+        <LinearLayout
+            android:id="@+id/layout_decks_points"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6.68" />
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/layout_decks_max_players"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_winpoints"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_txt_winpoints"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/tv_cardSum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView"
-        android:textSize="18sp" />
+            <Spinner
+                android:id="@+id/spinner_winpoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:spinnerMode="dropdown" />
 
-    <Button
-        android:text="@string/btn_txt_startLobby"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_startLobby"
-        style="?android:attr/borderlessButtonStyle"
-        android:background="@drawable/border"
-        android:layout_marginTop="20dp" />
+        </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_decks_off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/layout_decks_points"
+            android:layout_marginTop="80dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/tv_decks_off"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_txt_decks_off"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_lobbyCreate_off"
+                style="@android:style/Widget.Holo.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner
+                android:id="@+id/spinner_decks_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_horizontal"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_decks_unoff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/layout_decks_off"
+            android:layout_marginTop="35dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/tv_decks_unoff"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_txt_decks_unoff"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_lobbyCreate_unoff"
+                style="@android:style/Widget.Holo.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <view
+                android:id="@+id/spinner_decks_unoff"
+                class="at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner"
+                id="@+id/view"
+                layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6.68" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_decks_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/layout_decks_unoff"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/tv_decks_custom"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_txt_decks_custom"
+                android:textSize="18sp" />
+
+            <view
+                android:id="@+id/spinner_decks_custom"
+                class="at.fhooe.mc.android.cakespromoteobesity.extra.MultiSelectionSpinner"
+                id="@+id/view"
+                layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6.68" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_cardSum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:text="TextView"
+            android:textSize="18sp"
+            android:layout_above="@+id/btn_startLobby"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:id="@+id/btn_startLobby"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:text="@string/btn_txt_startLobby"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

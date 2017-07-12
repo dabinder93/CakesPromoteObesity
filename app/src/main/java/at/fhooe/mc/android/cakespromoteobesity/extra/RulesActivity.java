@@ -9,6 +9,9 @@ import org.w3c.dom.Text;
 
 import at.fhooe.mc.android.cakespromoteobesity.R;
 
+/**
+ * shows the rules of the game
+ */
 public class RulesActivity extends AppCompatActivity {
 
     TextView rules;

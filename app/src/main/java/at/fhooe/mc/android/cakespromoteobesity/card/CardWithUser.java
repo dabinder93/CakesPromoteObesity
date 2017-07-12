@@ -12,6 +12,11 @@ public class CardWithUser {
     //Firebase
     CardWithUser(){}
 
+    /**
+     * Konstruktor
+     * @param _mUserGameID
+     * @param _mCardText
+     */
     public CardWithUser(int _mUserGameID, String _mCardText){
         mUserGameID = _mUserGameID;
         mCardText = _mCardText;
